@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:search_frontend/core/domain/entities/file_node.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/utils/injection.dart';
 import 'package:search_frontend/core/widgets/index.dart';
@@ -10,7 +9,7 @@ import 'package:search_frontend/features/documents/presentation/widgets/index.da
 
 class NodeActionMenu extends StatelessWidget {
   final PathPart currentPath;
-  final FileNode node;
+  final Node node;
   final bool isSaved;
 
   const NodeActionMenu({
@@ -33,22 +32,21 @@ class NodeActionMenu extends StatelessWidget {
         );
       },
       menuChildren: [
-        if (node.type == "directory")
-          MenuItemButton(
-            leadingIcon: Icon(
-              isSaved ? Icons.star : Icons.star_border,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            onPressed: () {
-              context.read<SavedDirectoriesBloc>().add(
-                ToggleSavedDirectories(directoryId: node.id),
-              );
-            },
-            child: Text(
-              isSaved ? 'Удалить из избранного' : 'Добавить в избранное',
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
+        MenuItemButton(
+          leadingIcon: Icon(
+            isSaved ? Icons.star : Icons.star_border,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
+          onPressed: () {
+            context.read<SavedDirectoriesBloc>().add(
+              ToggleSavedNodes(nodeId: node.id),
+            );
+          },
+          child: Text(
+            isSaved ? 'Удалить из избранного' : 'Добавить в избранное',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        ),
         const PopupMenuDivider(height: 2),
         MenuItemButton(
           leadingIcon: Icon(
@@ -65,7 +63,7 @@ class NodeActionMenu extends StatelessWidget {
                     : DocumentUpdateDialog(document: node),
               ),
             ).then(
-              (value) => value is FileNode
+              (value) => value is Node
                   ? {
                       context.read<DirectoryBloc>().add(
                         LoadChildren(parentId: currentPath.id),

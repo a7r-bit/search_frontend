@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_frontend/core/constants/index.dart';
 import 'package:search_frontend/core/utils/index.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/saved_directories_bloc.dart';
-import 'package:search_frontend/features/documents/presentation/widgets/saved_directory_card.dart';
+import 'package:search_frontend/features/documents/presentation/widgets/saved_node_card.dart';
 
 class QuickAccessContainer extends StatelessWidget {
   const QuickAccessContainer({super.key});
@@ -54,7 +54,7 @@ class QuickAccessContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppPadding.small,
                           ),
-                          child: SavedDirectoryCard(directory: directory),
+                          child: SavedDirectoryCard(node: directory),
                         );
                       },
                     ),

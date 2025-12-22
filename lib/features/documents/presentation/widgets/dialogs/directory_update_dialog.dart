@@ -4,7 +4,7 @@ import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/dialog_bloc.dart';
 
 class DirectoryUpdateDialog extends StatefulWidget {
-  final FileNode directory;
+  final Node directory;
   const DirectoryUpdateDialog({super.key, required this.directory});
 
   @override

@@ -1,32 +1,34 @@
+import 'package:search_frontend/core/domain/entities/node.dart';
 import 'package:search_frontend/core/utils/index.dart';
-import 'package:search_frontend/features/documents/data/models/file_node_model.dart';
+import 'package:search_frontend/features/documents/data/models/node_model.dart';
 import 'package:search_frontend/features/documents/data/models/path_part_model.dart';
 
 abstract class FileNodeRemoteDataSource {
   Future<List<PathPartModel>> getRoot();
-  Future<List<PathPartModel>> getPath(String? id);
-  Future<List<FileNodeModel>> getChildren(String? parentId);
-  Future<List<FileNodeModel>> searchFile(String searchQuery);
-  Future<FileNodeModel> createDirectory({
+  Future<List<PathPartModel>> getPath(String id);
+  Future<List<NodeModel>> getChildren(String? parentId);
+  Future<List<NodeModel>> searchFile(String searchQuery);
+  Future<NodeModel> createNode({
+    required NodeType type,
     required String name,
     required String? parentId,
   });
-  Future<FileNodeModel> createDocument({
+  Future<NodeModel> createDocument({
     required String name,
     required String? description,
     required String directoryId,
   });
 
-  Future<FileNodeModel> deleteDirectory({required String directoryId});
-  Future<FileNodeModel> deleteDocument({required String documentId});
+  Future<NodeModel> deleteDirectory({required String directoryId});
+  Future<NodeModel> deleteDocument({required String documentId});
 
-  Future<FileNodeModel> updateDirectory({
+  Future<NodeModel> updateDirectory({
     required String directoryId,
     required String? name,
     required String? parentId,
   });
 
-  Future<FileNodeModel> updateDocument({
+  Future<NodeModel> updateDocument({
     required String documentId,
     required String? title,
     required String? description,
@@ -41,20 +43,21 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
     : _apiClient = apiClient;
 
   @override
-  Future<List<FileNodeModel>> getChildren(String? parentId) async {
+  Future<List<NodeModel>> getChildren(String? parentId) async {
     final response = await _apiClient.get(
-      "/directories/children",
+      "/node/children",
       queryParams: parentId != null ? {"parentId": parentId} : null,
+      // queryParams: {"parentId": parentId},
     );
     final List<dynamic> data = response;
 
     return data
-        .map((e) => FileNodeModel.fromJson(e as Map<String, dynamic>))
+        .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   @override
-  Future<List<FileNodeModel>> searchFile(String searchQuery) async {
+  Future<List<NodeModel>> searchFile(String searchQuery) async {
     final response = await _apiClient.get(
       "/directories/search",
       queryParams: {"searchQuery": searchQuery},
@@ -62,25 +65,26 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
     final List<dynamic> data = response;
 
     return data
-        .map((e) => FileNodeModel.fromJson(e as Map<String, dynamic>))
+        .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   @override
-  Future<FileNodeModel> createDirectory({
+  Future<NodeModel> createNode({
+    required NodeType type,
     required String name,
     required String? parentId,
   }) async {
     final Map<String, dynamic> response = await _apiClient.post(
-      "/directories/",
-      data: {"name": name, "parentId": parentId},
+      "/node/",
+      data: {"name": name, "type": type, "parentId": parentId},
     );
-    return FileNodeModel.fromJson(response);
+    return NodeModel.fromJson(response);
   }
 
   @override
-  Future<List<PathPartModel>> getPath(String? id) async {
-    final response = await _apiClient.get("/directories/$id/path");
+  Future<List<PathPartModel>> getPath(String id) async {
+    final response = await _apiClient.get("/node/$id/path");
     final List<dynamic> data = response;
     return data
         .map((e) => PathPartModel.fromJson(e as Map<String, dynamic>))
@@ -89,7 +93,7 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
 
   @override
   Future<List<PathPartModel>> getRoot() async {
-    final response = await _apiClient.get("/directories/path/root");
+    final response = await _apiClient.get("/node/path/root");
     final List<dynamic> data = response;
     return data
         .map((e) => PathPartModel.fromJson(e as Map<String, dynamic>))
@@ -97,7 +101,7 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
   }
 
   @override
-  Future<FileNodeModel> createDocument({
+  Future<NodeModel> createDocument({
     required String name,
     required String? description,
     required String directoryId,
@@ -110,23 +114,23 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
         "directoryId": directoryId,
       },
     );
-    return FileNodeModel.fromJson(responce);
+    return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<FileNodeModel> deleteDirectory({required String directoryId}) async {
+  Future<NodeModel> deleteDirectory({required String directoryId}) async {
     final responce = await _apiClient.delete("/directories/$directoryId");
-    return FileNodeModel.fromJson(responce);
+    return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<FileNodeModel> deleteDocument({required String documentId}) async {
+  Future<NodeModel> deleteDocument({required String documentId}) async {
     final responce = await _apiClient.delete("/documents/$documentId");
-    return FileNodeModel.fromJson(responce);
+    return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<FileNodeModel> updateDirectory({
+  Future<NodeModel> updateDirectory({
     required String directoryId,
     required String? name,
     required String? parentId,
@@ -135,11 +139,11 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
       "/directories/$directoryId",
       data: {"name": name, "parentId": parentId},
     );
-    return FileNodeModel.fromJson(responce);
+    return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<FileNodeModel> updateDocument({
+  Future<NodeModel> updateDocument({
     required String documentId,
     required String? title,
     required String? description,
@@ -153,6 +157,6 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
         "directoryId": directoryId,
       },
     );
-    return FileNodeModel.fromJson(responce);
+    return NodeModel.fromJson(responce);
   }
 }

@@ -12,7 +12,7 @@ final class DirectoryInitial extends DirectoryState {}
 final class DirectoryLoading extends DirectoryState {}
 
 final class DirectoryLoaded extends DirectoryState {
-  final List<FileNode> children;
+  final List<Node> children;
   final List<PathPart> path;
 
   const DirectoryLoaded({required this.children, required this.path});

@@ -1,16 +1,16 @@
-import 'package:search_frontend/core/domain/entities/file_node.dart';
+import 'package:search_frontend/core/domain/entities/node.dart';
 import 'package:search_frontend/core/domain/entities/path_part.dart';
 import 'package:search_frontend/core/errors/error_mapper.dart';
-import 'package:search_frontend/features/documents/data/datasources/file_node_remote_data_source.dart';
-import 'package:search_frontend/features/documents/domain/repositories/file_node_repository.dart';
+import 'package:search_frontend/features/documents/data/datasources/node_remote_data_source.dart';
+import 'package:search_frontend/features/documents/domain/repositories/node_repository.dart';
 
-class FileNodeRepositoryImpl implements FileNodeRepository {
+class NodeRepositoryImpl implements NodeRepository {
   final FileNodeRemoteDataSource remoteDataSource;
 
-  FileNodeRepositoryImpl({required this.remoteDataSource});
+  NodeRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<FileNode>> getChildren(String? parentId) async {
+  Future<List<Node>> getChildren(String? parentId) async {
     try {
       final fileNodes = await remoteDataSource.getChildren(parentId);
       return fileNodes.map((fileNode) => fileNode.toDomain()).toList();
@@ -20,7 +20,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<List<FileNode>> searchFile(String searchQuery) async {
+  Future<List<Node>> searchFile(String searchQuery) async {
     try {
       final fileNodes = await remoteDataSource.searchFile(searchQuery);
       return fileNodes.map((fileNode) => fileNode.toDomain()).toList();
@@ -30,7 +30,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<List<PathPart>> getPath(String? id) async {
+  Future<List<PathPart>> getPath(String id) async {
     try {
       final pathParts = await remoteDataSource.getPath(id);
       return pathParts.map((pathPart) => pathPart.toDomain()).toList();
@@ -50,7 +50,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> createDocument({
+  Future<Node> createDocument({
     required String name,
     required String? description,
     required String directoryId,
@@ -68,14 +68,16 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> createDirectory({
+  Future<Node> createNode({
+    required NodeType type,
     required String name,
     required String? parentId,
   }) async {
     try {
-      final fileNode = await remoteDataSource.createDirectory(
+      final fileNode = await remoteDataSource.createNode(
         name: name,
         parentId: parentId,
+        type: type,
       );
       return fileNode.toDomain();
     } on Exception catch (e) {
@@ -84,7 +86,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> deleteDirectory({required String directoryId}) async {
+  Future<Node> deleteDirectory({required String directoryId}) async {
     try {
       final fileNode = await remoteDataSource.deleteDirectory(
         directoryId: directoryId,
@@ -96,7 +98,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> deleteDocument({required String documentId}) async {
+  Future<Node> deleteDocument({required String documentId}) async {
     try {
       final fileNode = await remoteDataSource.deleteDocument(
         documentId: documentId,
@@ -108,7 +110,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> updateDirectory({
+  Future<Node> updateDirectory({
     required String directoryId,
     required String? name,
     required String? parentId,
@@ -126,7 +128,7 @@ class FileNodeRepositoryImpl implements FileNodeRepository {
   }
 
   @override
-  Future<FileNode> updateDocument({
+  Future<Node> updateDocument({
     required String documentId,
     required String? title,
     required String? description,

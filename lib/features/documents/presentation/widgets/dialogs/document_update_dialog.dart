@@ -4,7 +4,7 @@ import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/dialog_bloc.dart';
 
 class DocumentUpdateDialog extends StatefulWidget {
-  final FileNode document;
+  final Node document;
   const DocumentUpdateDialog({super.key, required this.document});
 
   @override

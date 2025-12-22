@@ -12,7 +12,7 @@ final class DialogInitial extends DialogState {}
 final class DialogLoading extends DialogState {}
 
 final class DialogLoaded extends DialogState {
-  final FileNode fileNode;
+  final Node fileNode;
 
   const DialogLoaded({required this.fileNode});
 
@@ -21,14 +21,14 @@ final class DialogLoaded extends DialogState {
 }
 
 class DialogDirectoryRenamed extends DialogState {
-  final FileNode fileNode;
+  final Node fileNode;
   const DialogDirectoryRenamed({required this.fileNode});
   @override
   List<Object> get props => [fileNode];
 }
 
 class DialogDocumentRenamed extends DialogState {
-  final FileNode fileNode;
+  final Node fileNode;
   const DialogDocumentRenamed({required this.fileNode});
   @override
   List<Object> get props => [fileNode];

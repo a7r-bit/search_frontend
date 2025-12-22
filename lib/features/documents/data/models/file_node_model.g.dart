@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'file_node_model.dart';
+part of 'node_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-FileNodeModel _$FileNodeModelFromJson(Map<String, dynamic> json) =>
-    FileNodeModel(
-      id: json['id'] as String,
-      type: json['type'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String?,
-      parentId: json['parentId'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+NodeModel _$FileNodeModelFromJson(Map<String, dynamic> json) => NodeModel(
+  id: json['id'] as String,
+  type: const NodeTypeConvertor().fromJson(json['type'] as String),
+  name: json['name'] as String,
+  description: json['description'] as String?,
+  parentId: json['parentId'] as String?,
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+);
 
-Map<String, dynamic> _$FileNodeModelToJson(FileNodeModel instance) =>
+Map<String, dynamic> _$FileNodeModelToJson(NodeModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': instance.type,
+      'type': const NodeTypeConvertor().toJson(instance.type),
       'name': instance.name,
       'description': instance.description,
       'parentId': instance.parentId,

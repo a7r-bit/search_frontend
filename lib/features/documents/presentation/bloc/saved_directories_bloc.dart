@@ -14,7 +14,7 @@ class SavedDirectoriesBloc
   SavedDirectoriesBloc({required this.repository})
     : super(SavedDirectoriesInitial()) {
     on<LoadSavedDirectories>(_onLoadSavedDirectories);
-    on<ToggleSavedDirectories>(_onToggleSavedDirectories);
+    on<ToggleSavedNodes>(_onToggleSavedDirectories);
   }
 
   Future<void> _onLoadSavedDirectories(
@@ -33,13 +33,13 @@ class SavedDirectoriesBloc
   }
 
   Future<void> _onToggleSavedDirectories(
-    ToggleSavedDirectories event,
+    ToggleSavedNodes event,
     Emitter<SavedDirectoriesState> emit,
   ) async {
     final previousState = state;
     emit(SavedDirectoriesLoading());
     try {
-      await repository.toggleSavedDirectory(directoryId: event.directoryId);
+      await repository.toggleSavedDirectory(directoryId: event.nodeId);
 
       final directories = await repository.getSavedDirectories();
       emit(SavedDirectoriesLoaded(directories: directories));

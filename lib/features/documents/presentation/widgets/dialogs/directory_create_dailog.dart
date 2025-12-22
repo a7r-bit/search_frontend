@@ -78,9 +78,10 @@ class _DirectoryCreateDialogState extends State<DirectoryCreateDialog> {
               if (_formKey.currentState?.validate() ?? false) {
                 final name = _nameController.text.trim();
                 context.read<DialogBloc>().add(
-                  CreateDirectory(
+                  CreateNode(
                     name: name,
                     parentId: widget.lastDirectoryPAth.id,
+                    type: NodeType.DIRECTORY,
                   ),
                 );
               }

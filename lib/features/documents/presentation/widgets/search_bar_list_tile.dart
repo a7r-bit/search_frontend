@@ -5,7 +5,7 @@ import '../../../../core/domain/entities/index.dart';
 
 class SearchBarListTile extends StatelessWidget {
   final SearchController controller;
-  final FileNode node;
+  final Node node;
   const SearchBarListTile({
     super.key,
     required this.node,

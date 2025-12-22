@@ -84,7 +84,7 @@ class DirectoryActionPanel extends StatelessWidget {
                         ),
                       ),
                     ).then(
-                      (value) => value is FileNode
+                      (value) => value is Node
                           ? context.read<DirectoryBloc>().add(
                               LoadChildren(parentId: path.last.id),
                             )
@@ -119,7 +119,7 @@ class DirectoryActionPanel extends StatelessWidget {
                           ),
                         ),
                       ).then(
-                        (value) => value is FileNode
+                        (value) => value is Node
                             ? context.read<DirectoryBloc>().add(
                                 LoadChildren(parentId: path.last.id),
                               )

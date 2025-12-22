@@ -1,4 +1,4 @@
-export "saved_directory_card.dart";
+export "saved_node_card.dart";
 export "./quick_access_container.dart";
 export "./search_bar.dart";
 export "directory_table_view.dart";

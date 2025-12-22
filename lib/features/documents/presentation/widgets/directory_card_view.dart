@@ -4,12 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:search_frontend/core/constants/index.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/utils/index.dart';
+import 'package:search_frontend/core/widgets/extention/node_type_icons.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/saved_directories_bloc.dart';
 import 'package:search_frontend/features/documents/presentation/widgets/index.dart';
 
 class DirectoryCardView extends StatelessWidget {
   final PathPart currenPath;
-  final List<FileNode> children;
+  final List<Node> children;
   const DirectoryCardView({
     super.key,
     required this.children,
@@ -50,7 +51,7 @@ class DirectoryCardView extends StatelessWidget {
 }
 
 class DirectoryCard extends StatefulWidget {
-  final FileNode node;
+  final Node node;
   final PathPart currentPath;
   const DirectoryCard({
     super.key,
@@ -80,19 +81,34 @@ class _DirectoryCardState extends State<DirectoryCard> {
         onHover: (value) => setState(() => isHovered = value),
 
         onTap: () async {
-          if (widget.node.type == "directory") {
-            context.goNamed(
-              "directory",
-              pathParameters: {"directoryId": widget.node.id},
-            );
-          } else if (widget.node.type == 'document') {
-            context.goNamed(
-              'documentDetails',
-              pathParameters: {
-                'directoryId': widget.currentPath.id!,
-                'id': widget.node.id,
-              },
-            );
+          // if (widget.node.type == "directory") {
+          //   context.goNamed(
+          //     "directory",
+          //     pathParameters: {"directoryId": widget.node.id},
+          //   );
+          // } else if (widget.node.type == 'document') {
+          //   context.goNamed(
+          //     'documentDetails',
+          //     pathParameters: {
+          //       'directoryId': widget.currentPath.id!,
+          //       'id': widget.node.id,
+          //     },
+          //   );
+          // }
+          switch (widget.node.type) {
+            case NodeType.DIRECTORY:
+              context.goNamed(
+                "directory",
+                pathParameters: {"directoryId": widget.node.id},
+              );
+            case NodeType.DOCUMENT:
+              context.goNamed(
+                'documentDetails',
+                pathParameters: {
+                  'directoryId': widget.currentPath.id!,
+                  'id': widget.node.id,
+                },
+              );
           }
         },
         child: LayoutBuilder(
@@ -117,11 +133,8 @@ class _DirectoryCardState extends State<DirectoryCard> {
                 children: [
                   Center(
                     child: Icon(
-                      widget.node.type == "directory"
-                          ? Icons.folder
-                          : Icons.file_present_rounded,
+                      widget.node.type.icon,
                       size: constraints.maxWidth * 0.35,
-
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),

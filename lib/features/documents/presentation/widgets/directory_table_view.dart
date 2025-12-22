@@ -7,7 +7,7 @@ import 'package:search_frontend/core/domain/entities/index.dart';
 class DirectoryTableView extends StatefulWidget {
   final PathPart currenPath;
 
-  final List<FileNode> children;
+  final List<Node> children;
 
   const DirectoryTableView({
     super.key,

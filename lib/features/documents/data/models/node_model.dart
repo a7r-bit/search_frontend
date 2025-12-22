@@ -1,18 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
+import 'package:search_frontend/features/documents/data/models/node_type_convertor.dart';
 part 'file_node_model.g.dart';
 
 @JsonSerializable()
-class FileNodeModel {
+class NodeModel {
   final String id;
-  final String type;
+  @NodeTypeConvertor()
+  final NodeType type;
   final String name;
   final String? description;
   final String? parentId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  FileNodeModel({
+  NodeModel({
     required this.id,
     required this.type,
     required this.name,
@@ -22,12 +24,12 @@ class FileNodeModel {
     required this.updatedAt,
   });
 
-  factory FileNodeModel.fromJson(Map<String, dynamic> json) =>
+  factory NodeModel.fromJson(Map<String, dynamic> json) =>
       _$FileNodeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileNodeModelToJson(this);
 
-  FileNode toDomain() => FileNode(
+  Node toDomain() => Node(
     id: id,
     type: type,
     name: name,

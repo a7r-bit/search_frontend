@@ -12,7 +12,7 @@ final class SearchInitial extends SearchState {}
 final class SearchLoading extends SearchState {}
 
 final class SearchLoaded extends SearchState {
-  final List<FileNode> files;
+  final List<Node> files;
 
   const SearchLoaded({required this.files});
 

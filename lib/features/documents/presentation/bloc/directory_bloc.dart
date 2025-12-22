@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/domain/failures/failure.dart';
-import 'package:search_frontend/features/documents/domain/repositories/file_node_repository.dart';
+import 'package:search_frontend/features/documents/domain/repositories/node_repository.dart';
 
 part 'directory_event.dart';
 part 'directory_state.dart';
 
 class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
-  final FileNodeRepository repository;
+  final NodeRepository repository;
   DirectoryBloc({required this.repository}) : super(DirectoryInitial()) {
     on<LoadChildren>(_onLoadChildren);
     on<LoadPath>(_onLoadPath);

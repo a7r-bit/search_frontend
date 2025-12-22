@@ -7,13 +7,18 @@ sealed class DialogEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class CreateDirectory extends DialogEvent {
+class CreateNode extends DialogEvent {
+  final NodeType type;
   final String name;
   final String? parentId;
 
-  const CreateDirectory({required this.name, required this.parentId});
+  const CreateNode({
+    required this.type,
+    required this.name,
+    required this.parentId,
+  });
   @override
-  List<Object?> get props => [parentId, name];
+  List<Object?> get props => [parentId, name, type];
 }
 
 class CreateDocument extends DialogEvent {
