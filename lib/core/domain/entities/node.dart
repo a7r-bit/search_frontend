@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:search_frontend/core/constants/index.dart';
+
 class Node {
   final String id;
   final NodeType type;
@@ -23,4 +26,10 @@ class Node {
   }
 }
 
-enum NodeType { DIRECTORY, DOCUMENT }
+enum NodeType {
+  DIRECTORY(Icons.folder),
+  DOCUMENT(Icons.file_present_rounded);
+
+  final IconData icon;
+  const NodeType(this.icon);
+}

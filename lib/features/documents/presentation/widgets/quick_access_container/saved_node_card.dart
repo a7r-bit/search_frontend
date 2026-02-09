@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:search_frontend/core/constants/index.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/utils/index.dart';
-import 'package:search_frontend/core/widgets/extention/node_type_icons.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/saved_directories_bloc.dart';
 
 import '../../bloc/index.dart';

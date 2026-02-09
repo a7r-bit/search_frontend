@@ -27,7 +27,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setField(value);
               },
-              child: Text("Type"),
+              child: Text("Тип"),
             ),
             RadioMenuButton(
               value: SortField.name,
@@ -36,7 +36,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setField(value);
               },
-              child: Text("Name"),
+              child: Text("Название"),
             ),
             RadioMenuButton(
               value: SortField.createdAt,
@@ -45,7 +45,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setField(value);
               },
-              child: Text("CreatedAt"),
+              child: Text("Дата создания"),
             ),
             RadioMenuButton(
               value: SortField.updatedAt,
@@ -55,7 +55,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setField(value);
               },
-              child: Text("UpdatedAt"),
+              child: Text("Дата обновления"),
             ),
 
             PopupMenuDivider(height: 2),
@@ -67,7 +67,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setOrder(value);
               },
-              child: Text("Ascending"),
+              child: Text("Убываниение"),
             ),
             RadioMenuButton(
               value: SortOrder.desc,
@@ -76,7 +76,7 @@ class DirectorySortMenu extends StatelessWidget {
                 if (value == null) return;
                 context.read<NodeSortCubit>().setOrder(value);
               },
-              child: Text("Descending"),
+              child: Text("Возрастание"),
             ),
           ],
         );

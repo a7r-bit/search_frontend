@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:search_frontend/core/constants/index.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/utils/index.dart';
-import 'package:search_frontend/core/widgets/extention/node_type_icons.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/saved_directories_bloc.dart';
 import 'package:search_frontend/features/documents/presentation/widgets/index.dart';
 
@@ -76,8 +75,7 @@ class _DirectoryCardState extends State<DirectoryCard> {
       borderRadius: BorderRadius.circular(AppRadius.small),
 
       child: InkWell(
-        onFocusChange: (isFocused) =>
-            setState(() => this.isFocused = isFocused),
+        onFocusChange: (isFocused) => setState(() => isFocused = isFocused),
 
         onHover: (value) => setState(() => isHovered = value),
 

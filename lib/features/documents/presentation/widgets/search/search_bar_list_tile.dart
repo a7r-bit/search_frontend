@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:search_frontend/core/constants/constants.dart';
-import 'package:search_frontend/core/widgets/extention/node_type_icons.dart';
 import 'package:search_frontend/features/document_details/presentaition/cubit/link_cubit.dart';
 import '../../../../../core/domain/entities/index.dart';
 import '../../../data/models/search_result.dart';

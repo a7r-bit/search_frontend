@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:search_frontend/core/constants/index.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
-import 'package:search_frontend/core/widgets/extention/node_type_icons.dart';
 
 class DirectoryTableView extends StatefulWidget {
   final PathPart currenPath;
@@ -41,7 +40,12 @@ class _DirectoryTableViewState extends State<DirectoryTableView> {
   @override
   Widget build(BuildContext context) {
     final gridColumns = [
-      PlutoColumn(title: "Id", field: "id", type: PlutoColumnType.text()),
+      PlutoColumn(
+        title: "Id",
+        field: "id",
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+      ),
       PlutoColumn(
         title: 'Название',
         field: 'name',
@@ -104,43 +108,28 @@ class _DirectoryTableViewState extends State<DirectoryTableView> {
         title: "Описание",
         field: "description",
         type: PlutoColumnType.text(),
+        enableEditingMode: false,
       ),
       PlutoColumn(
         title: "Родительский id",
         field: "parentId",
         type: PlutoColumnType.text(),
+        enableEditingMode: false,
         // hide: true,
       ),
 
       PlutoColumn(
+        enableEditingMode: false,
         title: 'Дата создания',
         field: 'created',
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
+        enableEditingMode: false,
         title: 'Дата обновления',
         field: 'updated',
         type: PlutoColumnType.date(),
       ),
-      // PlutoColumn(
-      //   title: '',
-      //   field: 'actions',
-      //   type: PlutoColumnType.text(),
-      //   enableSorting: false,
-      //   enableDropToResize: false,
-      //   enableColumnDrag: false,
-      //   textAlign: PlutoColumnTextAlign.center,
-      //   titleTextAlign: PlutoColumnTextAlign.center,
-      //   enableContextMenu: false,
-
-      //   width: 60,
-      //   minWidth: 40,
-      //   renderer: (ctx) => IconButton(
-      //     icon: Icon(Icons.more_vert),
-      //     onPressed: () {},
-      //     visualDensity: VisualDensity.compact,
-      //   ),
-      // ),
     ];
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
@@ -158,8 +147,9 @@ class _DirectoryTableViewState extends State<DirectoryTableView> {
           gridBorderRadius: BorderRadiusGeometry.circular(AppRadius.medium),
           columnTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
             color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
           ),
-          cellTextStyle: Theme.of(context).textTheme.bodyMedium!,
+          cellTextStyle: Theme.of(context).textTheme.bodySmall!,
 
           gridBackgroundColor: Theme.of(context).colorScheme.surfaceContainer,
 
