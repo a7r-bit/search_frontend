@@ -14,7 +14,7 @@ final drawerItems = [
   DrawerItemData(
     assetPath: "assets/icons/drawer_folder.svg",
     title: "Документы",
-    route: "/directory/root",
+    route: "/node/root",
   ),
   DrawerItemData(
     assetPath: "assets/icons/users.svg",

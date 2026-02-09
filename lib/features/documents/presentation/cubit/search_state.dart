@@ -12,12 +12,12 @@ final class SearchInitial extends SearchState {}
 final class SearchLoading extends SearchState {}
 
 final class SearchLoaded extends SearchState {
-  final List<Node> files;
+  final List<BaseSearchResultDTO> searchResults;
 
-  const SearchLoaded({required this.files});
+  const SearchLoaded({required this.searchResults});
 
   @override
-  List<Object> get props => [files];
+  List<Object> get props => [searchResults];
 }
 
 final class SearchError extends SearchState {

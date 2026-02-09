@@ -2,52 +2,68 @@ import 'package:search_frontend/core/domain/entities/node.dart';
 import 'package:search_frontend/core/utils/index.dart';
 import 'package:search_frontend/features/documents/data/models/node_model.dart';
 import 'package:search_frontend/features/documents/data/models/path_part_model.dart';
+import 'package:search_frontend/features/documents/presentation/widgets/directory_action_panel/directory_sort_menu.dart';
 
-abstract class FileNodeRemoteDataSource {
+abstract class NodeRemoteDataSource {
+  Future<NodeModel> getNodeById({required String nodeId});
+
   Future<List<PathPartModel>> getRoot();
+
   Future<List<PathPartModel>> getPath(String id);
-  Future<List<NodeModel>> getChildren(String? parentId);
-  Future<List<NodeModel>> searchFile(String searchQuery);
+
+  Future<List<NodeModel>> getChildren(
+    String? parentId,
+    SortField sortField,
+    SortOrder sortOrder,
+  );
+
+  // Future<List<NodeModel>> searchFile(String searchQuery);
+
   Future<NodeModel> createNode({
     required NodeType type,
     required String name,
+    required String? description,
     required String? parentId,
   });
-  Future<NodeModel> createDocument({
-    required String name,
-    required String? description,
-    required String directoryId,
-  });
 
-  Future<NodeModel> deleteDirectory({required String directoryId});
-  Future<NodeModel> deleteDocument({required String documentId});
+  Future<NodeModel> deleteNode({required String nodeId});
 
-  Future<NodeModel> updateDirectory({
-    required String directoryId,
+  Future<NodeModel> updateNode({
+    required String nodeId,
     required String? name,
-    required String? parentId,
+    required String? description,
   });
 
-  Future<NodeModel> updateDocument({
-    required String documentId,
-    required String? title,
-    required String? description,
-    required String? directoryId,
+  Future<NodeModel> moveNode({
+    required String nodeId,
+    required String newParentId,
   });
 }
 
-class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
+class DirectoryRemoteDataSourceImpl implements NodeRemoteDataSource {
   final ApiClient _apiClient;
 
   DirectoryRemoteDataSourceImpl({required ApiClient apiClient})
     : _apiClient = apiClient;
 
   @override
-  Future<List<NodeModel>> getChildren(String? parentId) async {
+  Future<List<NodeModel>> getChildren(
+    String? parentId,
+    SortField sortField,
+    SortOrder sortOrder,
+  ) async {
     final response = await _apiClient.get(
       "/node/children",
-      queryParams: parentId != null ? {"parentId": parentId} : null,
-      // queryParams: {"parentId": parentId},
+      queryParams: {
+        if (parentId != null) "parentId": parentId,
+        "sort": "${sortField.name}:${sortOrder.name}",
+      },
+      // parentId != null
+      //     ? {
+      //         "parentId": parentId,
+      //         "sort": "${sortField.name}:${sortOrder.name}",
+      //       }
+      //     : null,
     );
     final List<dynamic> data = response;
 
@@ -56,28 +72,34 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
         .toList();
   }
 
-  @override
-  Future<List<NodeModel>> searchFile(String searchQuery) async {
-    final response = await _apiClient.get(
-      "/directories/search",
-      queryParams: {"searchQuery": searchQuery},
-    );
-    final List<dynamic> data = response;
+  // @override
+  // Future<List<NodeModel>> searchFile(String searchQuery) async {
+  //   final response = await _apiClient.get(
+  //     "/directories/search",
+  //     queryParams: {"searchQuery": searchQuery},
+  //   );
+  //   final List<dynamic> data = response;
 
-    return data
-        .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
-        .toList();
-  }
+  //   return data
+  //       .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
+  //       .toList();
+  // }
 
   @override
   Future<NodeModel> createNode({
     required NodeType type,
     required String name,
+    required String? description,
     required String? parentId,
   }) async {
     final Map<String, dynamic> response = await _apiClient.post(
       "/node/",
-      data: {"name": name, "type": type, "parentId": parentId},
+      data: {
+        "name": name,
+        "type": type.name,
+        "parentId": parentId,
+        "description": description,
+      },
     );
     return NodeModel.fromJson(response);
   }
@@ -101,61 +123,38 @@ class DirectoryRemoteDataSourceImpl implements FileNodeRemoteDataSource {
   }
 
   @override
-  Future<NodeModel> createDocument({
-    required String name,
-    required String? description,
-    required String directoryId,
-  }) async {
-    final responce = await _apiClient.post(
-      "/documents",
-      data: {
-        "title": name,
-        "description": description,
-        "directoryId": directoryId,
-      },
-    );
+  Future<NodeModel> deleteNode({required String nodeId}) async {
+    final responce = await _apiClient.delete("/node/$nodeId");
     return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<NodeModel> deleteDirectory({required String directoryId}) async {
-    final responce = await _apiClient.delete("/directories/$directoryId");
-    return NodeModel.fromJson(responce);
-  }
-
-  @override
-  Future<NodeModel> deleteDocument({required String documentId}) async {
-    final responce = await _apiClient.delete("/documents/$documentId");
-    return NodeModel.fromJson(responce);
-  }
-
-  @override
-  Future<NodeModel> updateDirectory({
-    required String directoryId,
+  Future<NodeModel> updateNode({
+    required String nodeId,
     required String? name,
-    required String? parentId,
+    required String? description,
   }) async {
     final Map<String, dynamic> responce = await _apiClient.patch(
-      "/directories/$directoryId",
-      data: {"name": name, "parentId": parentId},
+      "/node/$nodeId",
+      data: {"name": name, "description": description},
     );
     return NodeModel.fromJson(responce);
   }
 
   @override
-  Future<NodeModel> updateDocument({
-    required String documentId,
-    required String? title,
-    required String? description,
-    required String? directoryId,
+  Future<NodeModel> getNodeById({required String nodeId}) async {
+    final Map<String, dynamic> responce = await _apiClient.get("/node/$nodeId");
+    return NodeModel.fromJson(responce);
+  }
+
+  @override
+  Future<NodeModel> moveNode({
+    required String nodeId,
+    required String newParentId,
   }) async {
-    final Map<String, dynamic> responce = await _apiClient.patch(
-      "/documents/$documentId",
-      data: {
-        "title": title,
-        "description": description,
-        "directoryId": directoryId,
-      },
+    final Map<String, dynamic> responce = await _apiClient.post(
+      "/node/$nodeId/move",
+      data: {"newParentId": newParentId},
     );
     return NodeModel.fromJson(responce);
   }

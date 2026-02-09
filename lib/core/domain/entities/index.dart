@@ -5,4 +5,3 @@ export 'path_part.dart';
 export 'node.dart';
 export 'document_version.dart';
 export 'media_file.dart';
-export 'document.dart';

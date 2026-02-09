@@ -73,13 +73,9 @@ class HeaderSidePanel extends StatelessWidget {
               builder: (context, controller, child) {
                 return IconButton(
                   icon: const Icon(Icons.keyboard_arrow_down),
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
+                  onPressed: () => controller.isOpen
+                      ? controller.close()
+                      : controller.open(),
                 );
               },
 

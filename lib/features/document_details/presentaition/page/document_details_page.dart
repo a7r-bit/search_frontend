@@ -40,7 +40,7 @@ class DocumentDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DocumentDetailWidget(
-                document: state.document,
+                node: state.node,
                 versions: state.documentVersions,
               ),
               DicumentDetailsActionRow(

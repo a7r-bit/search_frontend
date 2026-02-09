@@ -1,20 +1,18 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/domain/failures/failure.dart';
-import 'package:search_frontend/features/document_details/domain/repositories/document_repository.dart';
 import 'package:search_frontend/features/document_details/domain/repositories/document_version_repository.dart';
+import 'package:search_frontend/features/documents/domain/repositories/node_repository.dart';
 part 'document_details_event.dart';
 part 'document_details_state.dart';
 
 class DocumentDetailsBloc
     extends Bloc<DocumentDetailsEvent, DocumentDetailsState> {
-  final DocumentRepository documentRepository;
+  final NodeRepository nodeRepository;
   final DocumentVersionRepository documentVersionRepository;
   DocumentDetailsBloc({
-    required this.documentRepository,
+    required this.nodeRepository,
     required this.documentVersionRepository,
   }) : super(DocumentDetailsInitial()) {
     on<LoadDocumentDetails>(_onLoadDocumentDetails);
@@ -29,12 +27,10 @@ class DocumentDetailsBloc
 
     emit(DocumentDetailsLoading());
     try {
-      final document = await documentRepository.getDocumentById(
-        id: event.documentId,
-      );
+      final node = await nodeRepository.getNodeById(nodeId: event.nodeId);
       final documentversions = await documentVersionRepository
-          .getDocumentVersionsByDocumentId(
-            documentId: event.documentId,
+          .getDocumentVersionsByNodeId(
+            nodeId: event.nodeId,
             fileName: event.fileName,
             conversionStatus: event.conversionStatus,
             sortOrder: event.sortOrder,
@@ -43,7 +39,7 @@ class DocumentDetailsBloc
 
       emit(
         DocumentDetailsLoaded(
-          document: document,
+          node: node,
           documentVersions: documentversions,
           fileName: event.fileName,
           conversionStatus: event.conversionStatus,
@@ -65,12 +61,13 @@ class DocumentDetailsBloc
 
     emit(DocumentDetailsLoading());
     try {
-      final document = await documentRepository.getDocumentById(
-        id: previousState.document.id,
+      final node = await nodeRepository.getNodeById(
+        nodeId: previousState.node.id,
       );
+
       final documentversions = await documentVersionRepository
-          .getDocumentVersionsByDocumentId(
-            documentId: document.id,
+          .getDocumentVersionsByNodeId(
+            nodeId: node.id,
             fileName: previousState.fileName,
             conversionStatus: previousState.conversionStatus,
             sortOrder: previousState.sortOrder,
@@ -79,7 +76,7 @@ class DocumentDetailsBloc
 
       emit(
         DocumentDetailsLoaded(
-          document: document,
+          node: node,
           documentVersions: documentversions,
           fileName: previousState.fileName,
           conversionStatus: previousState.conversionStatus,

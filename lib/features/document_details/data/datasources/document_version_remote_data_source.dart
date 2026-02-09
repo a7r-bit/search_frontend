@@ -7,15 +7,15 @@ abstract class DocumentVersionRemoteDataSource {
   Future<DocumentVersionModel> getDocumentVersionById({
     required String docVersionId,
   });
-  Future<List<DocumentVersionModel>> getDocumentVersionsByDocumentId({
-    required String documentId,
+  Future<List<DocumentVersionModel>> getDocumentVersionsByNodeId({
+    required String nodeId,
     String? fileName,
     ConversionStatus? conversionStatus,
     String? sortParam,
   });
 
   Future<DocumentVersionModel> createDocumentVersion({
-    required String documentId,
+    required String nodeId,
     required MultipartFile multipartFile,
     Function(int sent, int total)? onProgress,
   });
@@ -48,14 +48,14 @@ class DocumentVersionRemoteDataSourceImpl
   }
 
   @override
-  Future<List<DocumentVersionModel>> getDocumentVersionsByDocumentId({
-    required String documentId,
+  Future<List<DocumentVersionModel>> getDocumentVersionsByNodeId({
+    required String nodeId,
     String? fileName,
     ConversionStatus? conversionStatus,
     String? sortParam,
   }) async {
     final responce = await _apiClient.get(
-      "/document-versions/$documentId/document",
+      "/document-versions/$nodeId/node",
       queryParams: {
         if (fileName != null) 'fileName': fileName,
         if (conversionStatus != null) 'conversionStatus': conversionStatus.name,
@@ -70,12 +70,12 @@ class DocumentVersionRemoteDataSourceImpl
 
   @override
   Future<DocumentVersionModel> createDocumentVersion({
-    required String documentId,
+    required String nodeId,
     required MultipartFile multipartFile,
     Function(int sent, int total)? onProgress,
   }) async {
     final formData = FormData.fromMap({
-      "documentId": documentId,
+      "nodeId": nodeId,
       "file": multipartFile,
     });
     final Map<String, dynamic> response = await _apiClient.post(

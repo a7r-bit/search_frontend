@@ -11,7 +11,7 @@ DocumentVersionModel _$DocumentVersionModelFromJson(
 ) => DocumentVersionModel(
   id: json['id'] as String,
   version: (json['version'] as num).toInt(),
-  documentId: json['documentId'] as String,
+  nodeId: json['nodeId'] as String,
   conversionStatus: const ConversionStatusConverter().fromJson(
     json['conversionStatus'] as String,
   ),
@@ -27,7 +27,7 @@ Map<String, dynamic> _$DocumentVersionModelToJson(
 ) => <String, dynamic>{
   'id': instance.id,
   'version': instance.version,
-  'documentId': instance.documentId,
+  'nodeId': instance.nodeId,
   'conversionStatus': const ConversionStatusConverter().toJson(
     instance.conversionStatus,
   ),

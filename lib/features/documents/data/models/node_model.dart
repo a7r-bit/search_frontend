@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/features/documents/data/models/node_type_convertor.dart';
-part 'file_node_model.g.dart';
+part 'node_model.g.dart';
 
 @JsonSerializable()
 class NodeModel {
@@ -25,9 +25,9 @@ class NodeModel {
   });
 
   factory NodeModel.fromJson(Map<String, dynamic> json) =>
-      _$FileNodeModelFromJson(json);
+      _$NodeModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FileNodeModelToJson(this);
+  Map<String, dynamic> toJson() => _$NodeModelToJson(this);
 
   Node toDomain() => Node(
     id: id,

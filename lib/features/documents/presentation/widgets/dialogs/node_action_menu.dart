@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:search_frontend/core/utils/injection.dart';
 import 'package:search_frontend/core/widgets/index.dart';
-import 'package:search_frontend/features/documents/presentation/bloc/dialog_bloc.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/index.dart';
+import 'package:search_frontend/features/documents/presentation/cubit/node_sort_cubit.dart';
 import 'package:search_frontend/features/documents/presentation/widgets/index.dart';
 
 class NodeActionMenu extends StatelessWidget {
@@ -44,10 +44,8 @@ class NodeActionMenu extends StatelessWidget {
           },
           child: Text(
             isSaved ? 'Удалить из избранного' : 'Добавить в избранное',
-            style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
-        const PopupMenuDivider(height: 2),
         MenuItemButton(
           leadingIcon: Icon(
             Icons.edit,
@@ -57,16 +55,24 @@ class NodeActionMenu extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => BlocProvider(
-                create: (context) => DialogBloc(repository: getIt()),
-                child: node.type == "directory"
-                    ? DirectoryUpdateDialog(directory: node)
-                    : DocumentUpdateDialog(document: node),
+                create: (context) => NodeBloc(repository: getIt()),
+                child: NodeUpdateDialog(node: node),
               ),
             ).then(
               (value) => value is Node
                   ? {
-                      context.read<DirectoryBloc>().add(
-                        LoadChildren(parentId: currentPath.id),
+                      context.read<NodeExplorerBloc>().add(
+                        LoadChildren(
+                          parentId: currentPath.id,
+                          sortField: context
+                              .read<NodeSortCubit>()
+                              .state
+                              .sortField,
+                          sortOrder: context
+                              .read<NodeSortCubit>()
+                              .state
+                              .sortOrder,
+                        ),
                       ),
                       context.read<SavedDirectoriesBloc>().add(
                         LoadSavedDirectories(),
@@ -75,56 +81,53 @@ class NodeActionMenu extends StatelessWidget {
                   : {},
             );
           },
-          child: Text(
-            'Переименовать',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+          child: Text('Переименовать'),
         ),
-        const PopupMenuDivider(height: 2),
         MenuItemButton(
           leadingIcon: Icon(
             Icons.delete_outline,
             color: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () async {
-            showDialog(
+            await showDialog(
               context: context,
               builder: (dialogContext) {
                 return BlocProvider.value(
-                  value: context.read<DirectoryBloc>(),
-                  child: Builder(
-                    builder: (innerContext) => WarningDialog(
-                      title: node.type == "directory"
-                          ? "Удаление директории"
-                          : "Удаление документа",
-                      description: node.type == "directory"
-                          ? "При удалении директории все вложенные каталоги и документы также будут удалены"
-                          : "Вы действительно хотите удалить этот документ?",
-                      okFunction: () async {
-                        final bloc = innerContext.read<DirectoryBloc>();
-                        if (node.type == "directory") {
-                          bloc.add(
-                            DeleteDirectory(
-                              directoryId: node.id,
-                              parentId: node.parentId,
-                            ),
-                          );
-                        } else {
-                          bloc.add(
-                            DeleteDocument(
-                              documentId: node.id,
-                              parentId: node.parentId,
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                  value: context.read<NodeBloc>(),
+                  child: WarningDialog(
+                    title: node.type == NodeType.DIRECTORY
+                        ? "Удаление директории"
+                        : "Удаление документа",
+                    description: node.type == NodeType.DIRECTORY
+                        ? "При удалении директории все вложенные каталоги и документы также будут удалены"
+                        : "Вы действительно хотите удалить этот документ?",
+                    okFunction: () async {
+                      context.read<NodeBloc>().add(DeleteNode(nodeId: node.id));
+
+                      context.read<NodeExplorerBloc>().add(
+                        LoadChildren(
+                          parentId: currentPath.id,
+                          sortField: context
+                              .read<NodeSortCubit>()
+                              .state
+                              .sortField,
+                          sortOrder: context
+                              .read<NodeSortCubit>()
+                              .state
+                              .sortOrder,
+                        ),
+                      );
+
+                      context.read<SavedDirectoriesBloc>().add(
+                        LoadSavedDirectories(),
+                      );
+                    },
                   ),
                 );
               },
             );
           },
-          child: Text('Удалить', style: Theme.of(context).textTheme.labelSmall),
+          child: Text('Удалить'),
         ),
       ],
     );

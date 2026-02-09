@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
 
 extension NodeTypeIcon on NodeType {

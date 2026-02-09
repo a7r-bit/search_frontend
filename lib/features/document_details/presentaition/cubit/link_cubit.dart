@@ -11,9 +11,9 @@ part 'link_state.dart';
 class LinkCubit extends Cubit<LinkState> {
   LinkCubit() : super(LinkInitial());
 
-  Future<void> openDocumentLink(DocumentVersion version) async {
+  Future<void> openDocumentLink(String fileUrl) async {
     try {
-      final url = "$API_URL${version.mediaFile?.fileUrl}";
+      final url = "$API_URL$fileUrl";
       final uri = Uri.tryParse(url);
 
       if (uri == null || !await canLaunchUrl(uri)) {

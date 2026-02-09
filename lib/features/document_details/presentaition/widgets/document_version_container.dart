@@ -34,7 +34,9 @@ class _DocumentVersionContainerState extends State<DocumentVersionContainer> {
 
         onHover: (value) => setState(() => isHovered = value),
         onTap: () async {
-          context.read<LinkCubit>().openDocumentLink(widget.documentVersion);
+          context.read<LinkCubit>().openDocumentLink(
+            widget.documentVersion.mediaFile?.fileUrl ?? "",
+          );
         },
         child: Stack(
           children: [
@@ -107,7 +109,7 @@ class _DocumentVersionContainerState extends State<DocumentVersionContainer> {
                   ),
                   RowInfoWidget(
                     labelText: "Создано: ",
-                    mainText: DateFormat.yMd().format(
+                    mainText: dateFormatter.format(
                       widget.documentVersion.createdAt,
                     ),
                     mainTextStyle: Theme.of(context).textTheme.labelSmall,
