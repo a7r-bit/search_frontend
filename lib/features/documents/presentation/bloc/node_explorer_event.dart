@@ -11,15 +11,17 @@ class LoadChildren extends NodeExplorerEvent {
   final String? parentId;
   final SortField sortField;
   final SortOrder sortOrder;
+  final NodeType? nodeType;
 
   const LoadChildren({
     required this.parentId,
-    required this.sortField,
-    required this.sortOrder,
+    this.sortField = SortField.name,
+    this.sortOrder = SortOrder.asc,
+    this.nodeType,
   });
 
   @override
-  List<Object?> get props => [parentId, sortField, sortOrder];
+  List<Object?> get props => [parentId, sortField, sortOrder, nodeType];
 }
 
 class LoadPath extends NodeExplorerEvent {

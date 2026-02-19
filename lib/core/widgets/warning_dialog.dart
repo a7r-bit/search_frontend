@@ -3,14 +3,8 @@ import 'package:flutter/material.dart';
 class WarningDialog<T> extends StatelessWidget {
   final String title;
   final String? description;
-  final Future<T> Function() okFunction;
 
-  const WarningDialog({
-    super.key,
-    required this.title,
-    this.description,
-    required this.okFunction,
-  });
+  const WarningDialog({super.key, required this.title, this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +41,11 @@ class WarningDialog<T> extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(false),
           child: const Text('Отмена'),
         ),
         TextButton(
-          onPressed: () async {
-            await okFunction();
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
+          onPressed: () => Navigator.of(context).pop(true),
           child: const Text('ОК'),
         ),
       ],

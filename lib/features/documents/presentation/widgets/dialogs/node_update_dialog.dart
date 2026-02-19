@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
+import 'package:search_frontend/core/utils/index.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/node_bloc.dart';
 
 class NodeUpdateDialog extends StatefulWidget {
@@ -28,6 +29,7 @@ class _NodeUpdateDialogState extends State<NodeUpdateDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final width = Responsive.dialogWidth(context);
     final isDirectory = widget.node.type == NodeType.DIRECTORY;
     final titleText = isDirectory
         ? "Обновление директории"
@@ -39,7 +41,9 @@ class _NodeUpdateDialogState extends State<NodeUpdateDialog> {
           Navigator.pop(context, state.node);
         }
       },
-      child: AlertDialog.adaptive(
+      child: AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Column(
           mainAxisSize: MainAxisSize.min,
@@ -54,38 +58,41 @@ class _NodeUpdateDialogState extends State<NodeUpdateDialog> {
           ],
         ),
 
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Название", style: Theme.of(context).textTheme.bodySmall),
-              SizedBox(height: 2),
-              TextFormField(
-                controller: _nameController,
-                autovalidateMode: AutovalidateMode.onUnfocus,
-                validator: (value) {
-                  // if (value == widget.node.name) {
-                  //   return "Новое название не может совпадать со старым";
-                  // }
-                  if (value == null || value.trim().isEmpty) {
-                    return "Название обязательно";
-                  }
-                  return null;
-                },
-              ),
-              Text("Описание", style: Theme.of(context).textTheme.bodySmall),
-              SizedBox(height: 2),
-              TextFormField(
-                controller: _descriptionController,
-                autovalidateMode: AutovalidateMode.onUnfocus,
-                validator: (value) {
-                  return null;
-                },
-              ),
-            ],
+        content: SizedBox(
+          width: width,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Название", style: Theme.of(context).textTheme.bodySmall),
+                SizedBox(height: 2),
+                TextFormField(
+                  controller: _nameController,
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  validator: (value) {
+                    // if (value == widget.node.name) {
+                    //   return "Новое название не может совпадать со старым";
+                    // }
+                    if (value == null || value.trim().isEmpty) {
+                      return "Название обязательно";
+                    }
+                    return null;
+                  },
+                ),
+                Text("Описание", style: Theme.of(context).textTheme.bodySmall),
+                SizedBox(height: 2),
+                TextFormField(
+                  controller: _descriptionController,
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  validator: (value) {
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         actions: [

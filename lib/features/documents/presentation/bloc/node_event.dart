@@ -40,7 +40,7 @@ class UpdateNode extends NodeEvent {
 
 class MoveNode extends NodeEvent {
   final String nodeId;
-  final String newParentId;
+  final String? newParentId;
 
   const MoveNode({required this.nodeId, required this.newParentId});
 

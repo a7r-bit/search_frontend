@@ -37,10 +37,10 @@ class SearchBarListTile extends StatelessWidget {
     DocumentVersionSearchResultDTO item,
   ) {
     return ListTile(
-      leading: const Icon(Icons.description_outlined),
+      leading: CircleAvatar(child: const Icon(Icons.description_outlined)),
       titleTextStyle: Theme.of(context).textTheme.labelMedium,
 
-      title: Text(item.fileName),
+      title: Text(item.fileName, maxLines: 1),
       subtitle: highlightText(
         item.highlight?.buildHighlight() ?? "",
         style: Theme.of(context).textTheme.labelSmall,
@@ -58,8 +58,8 @@ class SearchBarListTile extends StatelessWidget {
     NodeSearchResultDTO item,
   ) {
     return ListTile(
-      leading: Icon(item.type.icon),
-      title: Text(item.name),
+      leading: CircleAvatar(child: Icon(item.type.icon)),
+      title: Text(item.name, maxLines: 1),
       subtitle: highlightText(
         item.highlight?.buildHighlight() ?? "",
         style: Theme.of(context).textTheme.labelSmall,

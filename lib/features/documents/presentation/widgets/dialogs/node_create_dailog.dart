@@ -27,6 +27,7 @@ class _NodeCreateDialogState extends State<NodeCreateDialog> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final width = Responsive.dialogWidth(context);
 
     final isDirectory = widget.nodeType == NodeType.DIRECTORY;
     final titleText = isDirectory
@@ -63,15 +64,8 @@ class _NodeCreateDialogState extends State<NodeCreateDialog> {
           ],
         ),
 
-        content: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.isMobile(context)
-                ? SizeConfig.screenWidth * 0.9
-                : 560,
-            maxHeight: Responsive.isMobile(context)
-                ? SizeConfig.screenWidth * 0.9
-                : 560,
-          ),
+        content: SizedBox(
+          width: width,
           child: Form(
             key: _formKey,
             child: Column(
@@ -102,6 +96,7 @@ class _NodeCreateDialogState extends State<NodeCreateDialog> {
             ),
           ),
         ),
+
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

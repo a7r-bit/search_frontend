@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:search_frontend/core/domain/entities/index.dart';
@@ -19,6 +21,9 @@ class NodeExplorerBloc extends Bloc<NodeExplorerEvent, NodeExplorerState> {
     LoadChildren event,
     Emitter<NodeExplorerState> emit,
   ) async {
+    log(
+      'Loading children for node ${event.parentId} with sort ${event.sortField} ${event.sortOrder}',
+    );
     final previousState = state;
     emit(NodeLoadLoading());
     try {
@@ -26,6 +31,7 @@ class NodeExplorerBloc extends Bloc<NodeExplorerEvent, NodeExplorerState> {
         event.parentId,
         event.sortField,
         event.sortOrder,
+        event.nodeType,
       );
       final path = event.parentId != null
           ? await repository.getPath(event.parentId!)

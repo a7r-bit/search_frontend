@@ -5,12 +5,10 @@ import '../../../../../core/utils/cubit/ui_state_cubit.dart';
 import '../../../../../core/utils/cubit/ui_state_state.dart';
 
 class DirectoryViewToogle extends StatelessWidget {
-  const DirectoryViewToogle({super.key, required this.uiState});
-
-  final UIState uiState;
-
+  const DirectoryViewToogle({super.key});
   @override
   Widget build(BuildContext context) {
+    final uiState = context.watch<UiStateCubit>().state;
     return IconButton(
       onPressed: () => context.read<UiStateCubit>().toggleTableView(),
 

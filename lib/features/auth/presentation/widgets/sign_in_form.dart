@@ -29,7 +29,7 @@ class _SignInFormState extends State<SignInForm> {
     SizeConfig().init(context);
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(AppPadding.small),
+      padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
       height: SizeConfig.screenHeight - 100,
       constraints: BoxConstraints(maxWidth: 1000, maxHeight: 600),
       decoration: BoxDecoration(
@@ -130,19 +130,21 @@ class _SignInFormState extends State<SignInForm> {
                                   vertical: AppPadding.small,
                                 ),
 
-                                child: state.status == AuthStatus.loading
-                                    ? CircularProgressIndicator()
-                                    : Text(
-                                        'Войти',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall!
-                                            .copyWith(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                            ),
-                                      ),
+                                child:
+                                    // state.status == AuthStatus.loading
+                                    // ? CircularProgressIndicator()
+                                    // :
+                                    Text(
+                                      'Войти',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
+                                          ),
+                                    ),
                               ),
                             ),
                           );

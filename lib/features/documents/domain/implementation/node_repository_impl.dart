@@ -15,28 +15,14 @@ class NodeRepositoryImpl implements NodeRepository {
     String? parentId,
     SortField sortField,
     SortOrder sortOrder,
+    NodeType? nodeType,
   ) async {
     try {
-      // TODO: Pass sortField and sortOrder to data source
       final fileNodes = await remoteDataSource.getChildren(
         parentId,
         sortField,
         sortOrder,
-      );
-      return fileNodes.map((fileNode) => fileNode.toDomain()).toList();
-    } on Exception catch (e) {
-      throw mapExceptionToFailure(e);
-    }
-  }
-
-  @override
-  Future<List<Node>> searchFile(String searchQuery) async {
-    try {
-      // TODO
-      final fileNodes = await remoteDataSource.getChildren(
-        "123",
-        SortField.name,
-        SortOrder.asc,
+        nodeType,
       );
       return fileNodes.map((fileNode) => fileNode.toDomain()).toList();
     } on Exception catch (e) {
@@ -125,7 +111,7 @@ class NodeRepositoryImpl implements NodeRepository {
   @override
   Future<Node> moveNode({
     required String nodeId,
-    required String newParentId,
+    required String? newParentId,
   }) async {
     try {
       final fileNode = await remoteDataSource.moveNode(

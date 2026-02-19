@@ -8,9 +8,8 @@ abstract class NodeRepository {
     String? parentId,
     SortField sortField,
     SortOrder sortOrder,
+    NodeType? nodeType,
   );
-
-  Future<List<Node>> searchFile(String searchQuery);
 
   Future<Node> createNode({
     required NodeType type,
@@ -29,7 +28,7 @@ abstract class NodeRepository {
     required String? description,
   });
 
-  Future<Node> moveNode({required String nodeId, required String newParentId});
+  Future<Node> moveNode({required String nodeId, required String? newParentId});
 
   Future<Node> deleteNode({required String nodeId});
 }

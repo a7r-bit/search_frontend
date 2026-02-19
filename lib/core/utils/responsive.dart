@@ -37,6 +37,17 @@ class Responsive extends StatelessWidget {
     }
   }
 
+  static double dialogWidth(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return Responsive.of<double>(
+      context: context,
+      mobile: size.width - 32, // почти во всю ширину, с отступами
+      tablet: size.width / 3,
+      desktop: size.width / 4,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

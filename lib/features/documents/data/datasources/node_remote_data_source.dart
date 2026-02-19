@@ -15,9 +15,8 @@ abstract class NodeRemoteDataSource {
     String? parentId,
     SortField sortField,
     SortOrder sortOrder,
+    NodeType? nodeType,
   );
-
-  // Future<List<NodeModel>> searchFile(String searchQuery);
 
   Future<NodeModel> createNode({
     required NodeType type,
@@ -36,7 +35,7 @@ abstract class NodeRemoteDataSource {
 
   Future<NodeModel> moveNode({
     required String nodeId,
-    required String newParentId,
+    required String? newParentId,
   });
 }
 
@@ -51,19 +50,15 @@ class DirectoryRemoteDataSourceImpl implements NodeRemoteDataSource {
     String? parentId,
     SortField sortField,
     SortOrder sortOrder,
+    NodeType? nodeType,
   ) async {
     final response = await _apiClient.get(
       "/node/children",
       queryParams: {
         if (parentId != null) "parentId": parentId,
         "sort": "${sortField.name}:${sortOrder.name}",
+        if (nodeType != null) "type": nodeType.name,
       },
-      // parentId != null
-      //     ? {
-      //         "parentId": parentId,
-      //         "sort": "${sortField.name}:${sortOrder.name}",
-      //       }
-      //     : null,
     );
     final List<dynamic> data = response;
 
@@ -71,19 +66,6 @@ class DirectoryRemoteDataSourceImpl implements NodeRemoteDataSource {
         .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
-
-  // @override
-  // Future<List<NodeModel>> searchFile(String searchQuery) async {
-  //   final response = await _apiClient.get(
-  //     "/directories/search",
-  //     queryParams: {"searchQuery": searchQuery},
-  //   );
-  //   final List<dynamic> data = response;
-
-  //   return data
-  //       .map((e) => NodeModel.fromJson(e as Map<String, dynamic>))
-  //       .toList();
-  // }
 
   @override
   Future<NodeModel> createNode({
@@ -150,9 +132,9 @@ class DirectoryRemoteDataSourceImpl implements NodeRemoteDataSource {
   @override
   Future<NodeModel> moveNode({
     required String nodeId,
-    required String newParentId,
+    required String? newParentId,
   }) async {
-    final Map<String, dynamic> responce = await _apiClient.post(
+    final Map<String, dynamic> responce = await _apiClient.put(
       "/node/$nodeId/move",
       data: {"newParentId": newParentId},
     );

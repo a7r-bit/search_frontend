@@ -26,19 +26,13 @@ class DirectoryContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DirectoryActionPanel(uiState: uiState, path: state.path),
+                DirectoryActionPanel(),
                 SizedBox(height: SizeConfig.blockSizeVertical),
 
                 Expanded(
                   child: uiState.isTableView
-                      ? DirectoryCardView(
-                          children: state.children,
-                          currenPath: state.path.last,
-                        )
-                      : DirectoryTableView(
-                          children: state.children,
-                          currenPath: state.path.last,
-                        ),
+                      ? DirectoryCardView()
+                      : DirectoryTableView(),
                 ),
               ],
             );
