@@ -13,7 +13,7 @@ class LinkCubit extends Cubit<LinkState> {
 
   Future<void> openDocumentLink(String fileUrl) async {
     try {
-      final url = "$API_URL$fileUrl";
+      final url = "http://localhost$fileUrl";
       final uri = Uri.tryParse(url);
 
       if (uri == null || !await canLaunchUrl(uri)) {

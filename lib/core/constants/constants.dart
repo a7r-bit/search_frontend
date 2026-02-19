@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-const API_URL = "http://10.29.164.82:3000";
+const String API_URL = String.fromEnvironment(
+  "API_URL",
+  defaultValue: "http://localhost:3000",
+);
 
 const ACCESS_TOKEN_STORAGE_KEY = "access_token";
 const REFRESH_TOKEN_STORAGE_KEY = "refresh_token";
@@ -47,6 +50,11 @@ Widget highlightText(String text, {TextStyle? style}) {
   }
 
   return RichText(text: TextSpan(children: spans));
+}
+
+enum DirectoryViewMode {
+  navigation, // go_router
+  move, // обновление через bloc
 }
 
 final dateFormatter = DateFormat('yMMMMd');
