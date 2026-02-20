@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/constants/index.dart';
 import '../../../../core/domain/failures/failure.dart';
 
 part 'link_state.dart';
