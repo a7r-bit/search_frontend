@@ -8,7 +8,7 @@ sealed class DocumentDetailsEvent extends Equatable {
 }
 
 class LoadDocumentDetails extends DocumentDetailsEvent {
-  final String documentId;
+  final String nodeId;
   final String? fileName;
   final ConversionStatus? conversionStatus;
   final String? sortParam;
@@ -19,11 +19,11 @@ class LoadDocumentDetails extends DocumentDetailsEvent {
     this.conversionStatus,
     this.sortParam,
     this.sortOrder,
-    required this.documentId,
+    required this.nodeId,
   });
 
   @override
-  List<Object> get props => [documentId];
+  List<Object> get props => [nodeId];
 }
 
 class ReloadDocumentDetails extends DocumentDetailsEvent {}

@@ -5,11 +5,11 @@ import '../../../../core/utils/index.dart';
 import 'index.dart';
 
 class DocumentDetailWidget extends StatelessWidget {
-  final Document document;
+  final Node node;
   final List<DocumentVersion> versions;
   const DocumentDetailWidget({
     super.key,
-    required this.document,
+    required this.node,
     required this.versions,
   });
 
@@ -21,12 +21,12 @@ class DocumentDetailWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          document.title,
+          node.name,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
             color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
-        if (document.description != null) ...[
+        if (node.description != null) ...[
           SizedBox(height: SizeConfig.blockSizeVertical),
           RichText(
             text: TextSpan(
@@ -36,7 +36,7 @@ class DocumentDetailWidget extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: document.description!,
+                  text: node.description!,
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
@@ -48,12 +48,12 @@ class DocumentDetailWidget extends StatelessWidget {
         SizedBox(height: SizeConfig.blockSizeVertical),
         RowInfoWidget(
           labelText: "Дата создания: ",
-          mainText: dateFormatter.format(document.createdAt.toLocal()),
+          mainText: dateFormatter.format(node.createdAt.toLocal()),
         ),
         SizedBox(height: SizeConfig.blockSizeVertical),
         RowInfoWidget(
           labelText: "Дата обновления: ",
-          mainText: dateFormatter.format(document.updatedAt.toLocal()),
+          mainText: dateFormatter.format(node.updatedAt.toLocal()),
         ),
         SizedBox(height: SizeConfig.blockSizeVertical),
         RowInfoWidget(

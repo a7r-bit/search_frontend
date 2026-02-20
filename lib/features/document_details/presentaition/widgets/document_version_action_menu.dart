@@ -6,7 +6,6 @@ import 'package:search_frontend/features/document_details/presentaition/bloc/doc
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_version_update_bloc.dart';
 
 import '../../../../core/utils/injection.dart';
-import '../../../../core/widgets/index.dart';
 import 'index.dart';
 
 class DocumentVersionActionMenu extends StatelessWidget {
@@ -61,7 +60,7 @@ class DocumentVersionActionMenu extends StatelessWidget {
         MenuItemButton(
           leadingIcon: Icon(Icons.delete_outline),
           onPressed: () async {
-            showDialog(
+            await showDialog<bool>(
               context: context,
               builder: (dialogContext) {
                 return BlocProvider<DocumentVersionDeleteBloc>(
@@ -75,26 +74,41 @@ class DocumentVersionActionMenu extends StatelessWidget {
                       >(
                         listener: (listenerContext, state) {
                           if (state is DocumentVersionDeleteSuccess) {
+                            // обновляем детали документа
                             context.read<DocumentDetailsBloc>().add(
                               ReloadDocumentDetails(),
                             );
+                            // закрываем диалог
+                            Navigator.of(listenerContext).pop(true);
                           }
                         },
                         child: Builder(
                           builder: (innerContext) {
-                            return WarningDialog(
-                              title: "Подтвердите удаление",
-                              description:
-                                  "Вы уверены, что хотите удалить версию документа?",
-                              okFunction: () async {
-                                innerContext
-                                    .read<DocumentVersionDeleteBloc>()
-                                    .add(
-                                      DeleteDocumentVersionEvent(
-                                        doumentversionId: documentVersion.id,
-                                      ),
-                                    );
-                              },
+                            return AlertDialog(
+                              title: Text("Подтвердите удаление"),
+                              content: Text(
+                                "Вы уверены, что хотите удалить версию документа?",
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(innerContext).pop(false),
+                                  child: const Text("Отмена"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    innerContext
+                                        .read<DocumentVersionDeleteBloc>()
+                                        .add(
+                                          DeleteDocumentVersionEvent(
+                                            doumentversionId:
+                                                documentVersion.id,
+                                          ),
+                                        );
+                                  },
+                                  child: const Text("ОК"),
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -103,9 +117,57 @@ class DocumentVersionActionMenu extends StatelessWidget {
               },
             );
           },
-
           child: Text('Удалить', style: Theme.of(context).textTheme.labelSmall),
         ),
+
+        // MenuItemButton(
+        //   leadingIcon: Icon(Icons.delete_outline),
+        //   onPressed: () async {
+        //     showDialog(
+        //       context: context,
+        //       builder: (dialogContext) {
+        //         return BlocProvider<DocumentVersionDeleteBloc>(
+        //           create: (_) => DocumentVersionDeleteBloc(
+        //             documentVersionRepository: getIt(),
+        //           ),
+        //           child:
+        //               BlocListener<
+        //                 DocumentVersionDeleteBloc,
+        //                 DocumentVersionDeleteState
+        //               >(
+        //                 listener: (listenerContext, state) {
+        //                   if (state is DocumentVersionDeleteSuccess) {
+        //                     context.read<DocumentDetailsBloc>().add(
+        //                       ReloadDocumentDetails(),
+        //                     );
+        //                   }
+        //                 },
+        //                 child: Builder(
+        //                   builder: (innerContext) {
+        //                     return WarningDialog(
+        //                       title: "Подтвердите удаление",
+        //                       description:
+        //                           "Вы уверены, что хотите удалить версию документа?",
+        //                       okFunction: () async {
+        //                         innerContext
+        //                             .read<DocumentVersionDeleteBloc>()
+        //                             .add(
+        //                               DeleteDocumentVersionEvent(
+        //                                 doumentversionId: documentVersion.id,
+        //                               ),
+        //                             );
+        //                       },
+        //                     );
+        //                   },
+        //                 ),
+        //               ),
+        //         );
+        //       },
+        //     );
+        //   },
+
+        //   child: Text('Удалить', style: Theme.of(context).textTheme.labelSmall),
+        // ),
       ],
     );
   }

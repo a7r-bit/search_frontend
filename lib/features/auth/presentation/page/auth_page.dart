@@ -15,7 +15,7 @@ class AuthPage extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state.status == AuthStatus.success) {
-          context.goNamed("directory", pathParameters: {"directoryId": "root"});
+          context.goNamed("node", pathParameters: {"nodeId": "root"});
         }
         if (state.status == AuthStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(

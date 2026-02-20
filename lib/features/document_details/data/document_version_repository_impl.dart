@@ -25,8 +25,8 @@ class DocumentVersionRepositoryImpl implements DocumentVersionRepository {
   }
 
   @override
-  Future<List<DocumentVersion>> getDocumentVersionsByDocumentId({
-    required String documentId,
+  Future<List<DocumentVersion>> getDocumentVersionsByNodeId({
+    required String nodeId,
     String? fileName,
     ConversionStatus? conversionStatus,
     String? sortParam,
@@ -34,8 +34,8 @@ class DocumentVersionRepositoryImpl implements DocumentVersionRepository {
   }) async {
     try {
       final documentVersions = await remoteDataSource
-          .getDocumentVersionsByDocumentId(
-            documentId: documentId,
+          .getDocumentVersionsByNodeId(
+            nodeId: nodeId,
             fileName: fileName,
             conversionStatus: conversionStatus,
             sortParam: (sortParam != null && sortOrder != null)
@@ -51,13 +51,13 @@ class DocumentVersionRepositoryImpl implements DocumentVersionRepository {
 
   @override
   Future<DocumentVersion> createDocumentVersion({
-    required String documentId,
+    required String nodeId,
     required MultipartFile multipartFile,
     Function(int sent, int total)? onProgress,
   }) async {
     try {
       final documentVersion = await remoteDataSource.createDocumentVersion(
-        documentId: documentId,
+        nodeId: nodeId,
         multipartFile: multipartFile,
         onProgress: onProgress,
       );

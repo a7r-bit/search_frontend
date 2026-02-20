@@ -32,7 +32,6 @@ class DicumentDetailsActionRow extends StatelessWidget {
         IconButton(
           onPressed: () {
             final parentContext = context;
-
             _showFilterMenu(parentContext);
           },
 
@@ -78,7 +77,7 @@ class DicumentDetailsActionRow extends StatelessWidget {
                 (value) => value is DocumentVersion
                     ? {
                         context.read<DocumentDetailsBloc>().add(
-                          LoadDocumentDetails(documentId: documentId),
+                          LoadDocumentDetails(nodeId: documentId),
                         ),
                       }
                     : {},
@@ -101,7 +100,7 @@ class DicumentDetailsActionRow extends StatelessWidget {
       onApply: ({conversionStatus, fileName, sortOrder, sortParam}) {
         parentContext.read<DocumentDetailsBloc>().add(
           LoadDocumentDetails(
-            documentId: documentId,
+            nodeId: documentId,
             conversionStatus: conversionStatus,
             fileName: fileName,
             sortOrder: sortOrder,

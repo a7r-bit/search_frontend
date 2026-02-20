@@ -12,7 +12,7 @@ final class DocumentDetailsInitial extends DocumentDetailsState {}
 final class DocumentDetailsLoading extends DocumentDetailsState {}
 
 final class DocumentDetailsLoaded extends DocumentDetailsState {
-  final Document document;
+  final Node node;
   final List<DocumentVersion> documentVersions;
   final String? fileName;
   final ConversionStatus? conversionStatus;
@@ -24,12 +24,12 @@ final class DocumentDetailsLoaded extends DocumentDetailsState {
     this.conversionStatus,
     this.sortParam,
     this.sortOrder,
-    required this.document,
+    required this.node,
     required this.documentVersions,
   });
 
   @override
-  List<Object> get props => [document, documentVersions];
+  List<Object> get props => [node, documentVersions];
 }
 
 final class DocumentDetailsError extends DocumentDetailsState {

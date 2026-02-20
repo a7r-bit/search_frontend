@@ -10,11 +10,11 @@ sealed class SavedDirectoriesEvent extends Equatable {
 class LoadSavedDirectories extends SavedDirectoriesEvent {}
 
 // Сохранить/Удалить директорию
-class ToggleSavedDirectories extends SavedDirectoriesEvent {
-  final String directoryId;
+class ToggleSavedNodes extends SavedDirectoriesEvent {
+  final String nodeId;
 
-  ToggleSavedDirectories({required this.directoryId});
+  ToggleSavedNodes({required this.nodeId});
 
   @override
-  List<Object?> get props => [directoryId];
+  List<Object?> get props => [nodeId];
 }

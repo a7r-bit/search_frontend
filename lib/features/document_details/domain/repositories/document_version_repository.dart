@@ -5,8 +5,8 @@ abstract class DocumentVersionRepository {
   Future<DocumentVersion> getDocumentVersionById({
     required String docVersionId,
   });
-  Future<List<DocumentVersion>> getDocumentVersionsByDocumentId({
-    required String documentId,
+  Future<List<DocumentVersion>> getDocumentVersionsByNodeId({
+    required String nodeId,
     String? fileName,
     ConversionStatus? conversionStatus,
     String? sortParam,
@@ -14,7 +14,7 @@ abstract class DocumentVersionRepository {
   });
 
   Future<DocumentVersion> createDocumentVersion({
-    required String documentId,
+    required String nodeId,
     required MultipartFile multipartFile,
     Function(int sent, int total)? onProgress,
   });

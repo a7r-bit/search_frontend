@@ -20,11 +20,11 @@ final class AddFileEvent extends DocumentUploadEvent {
 }
 
 final class CreateDocumentVersion extends DocumentUploadEvent {
-  final String documentId;
+  final String nodeId;
   final PlatformFile file;
 
-  const CreateDocumentVersion({required this.documentId, required this.file});
+  const CreateDocumentVersion({required this.nodeId, required this.file});
 
   @override
-  List<Object> get props => [documentId, file];
+  List<Object> get props => [nodeId, file];
 }

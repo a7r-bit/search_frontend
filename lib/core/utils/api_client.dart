@@ -22,7 +22,7 @@ class ApiClient {
       ) {
     _dio.interceptors.add(
       LogInterceptor(
-        request: false,
+        request: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
@@ -44,6 +44,25 @@ class ApiClient {
   }) async {
     try {
       final response = await _dio.post(
+        path,
+        data: data,
+        options: options,
+        onSendProgress: onSendProgress,
+      );
+      return _processResponse(response) as T;
+    } on DioException catch (e) {
+      _handleDioException(e);
+    }
+  }
+
+  Future<T> put<T>(
+    String path, {
+    dynamic data,
+    Options? options,
+    Function(int sent, int total)? onSendProgress,
+  }) async {
+    try {
+      final response = await _dio.put(
         path,
         data: data,
         options: options,

@@ -10,6 +10,7 @@ import 'package:search_frontend/features/auth/presentation/page/auth_page.dart';
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_details_bloc.dart';
 import 'package:search_frontend/features/document_details/presentaition/cubit/link_cubit.dart';
 import 'package:search_frontend/features/document_details/presentaition/page/document_details_page.dart';
+import 'package:search_frontend/features/documents/presentation/cubit/node_sort_cubit.dart';
 import 'package:search_frontend/features/documents/presentation/cubit/search_cubit.dart';
 import 'package:search_frontend/features/documents/presentation/page/documents_page.dart';
 import 'package:search_frontend/features/main_layout/presentation/page/main_layout.dart';
@@ -33,9 +34,13 @@ class AppRouter {
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
-          final showHeader =
-              state.uri.toString().split("/")[1] == "directory" &&
-              state.uri.toString().split("/").length == 3;
+          //
+          final rawNodeId = state.pathParameters['nodeId'];
+          final String? currentNodeId = rawNodeId == 'root' ? null : rawNodeId;
+
+          final isNodeRoute = state.matchedLocation.startsWith("/node/");
+          final showHeader = isNodeRoute && state.pathParameters.length == 1;
+
           return MultiBlocProvider(
             providers: [
               BlocProvider<UiStateCubit>.value(value: getIt<UiStateCubit>()),
@@ -45,6 +50,8 @@ class AppRouter {
               BlocProvider<ErrorBloc>.value(value: getIt<ErrorBloc>()),
 
               BlocProvider<AuthCubit>.value(value: getIt<AuthCubit>()),
+
+              BlocProvider<LinkCubit>(create: (_) => getIt<LinkCubit>()),
             ],
             child: BlocListener<ErrorBloc, ErrorState>(
               listener: (context, state) {
@@ -61,7 +68,7 @@ class AppRouter {
               },
               child: MainLayout(
                 headerWidget: showHeader && !Responsive.isMobile(context)
-                    ? SearchWidget()
+                    ? SearchWidget(currentNodeId: currentNodeId)
                     : const SizedBox(height: 56),
                 child: child,
               ),
@@ -71,23 +78,25 @@ class AppRouter {
 
         routes: [
           GoRoute(
-            name: "directory",
-            path: "/directory/:directoryId",
+            name: "node",
+            path: "/node/:nodeId",
             pageBuilder: (context, state) {
-              final directoryId = state.pathParameters["directoryId"] == "root"
+              final node = state.pathParameters["nodeId"] == "root"
                   ? null
-                  : state.pathParameters["directoryId"];
+                  : state.pathParameters["nodeId"];
 
               return NoTransitionPage(
-                key: ValueKey('dir_${directoryId ?? 'root'}'),
-                child: DocumentsPage(directoryId: directoryId),
+                child: BlocProvider<NodeSortCubit>(
+                  create: (_) => NodeSortCubit(),
+                  child: DocumentsPage(nodeId: node),
+                ),
               );
             },
           ),
 
           GoRoute(
             name: "documentDetails",
-            path: "/directory/:directoryId/details/:id",
+            path: "/node/:nodeId/details/:id",
 
             builder: (context, state) {
               final documentId = state.pathParameters['id']!;
@@ -96,9 +105,8 @@ class AppRouter {
                   BlocProvider(
                     create: (_) =>
                         getIt<DocumentDetailsBloc>()
-                          ..add(LoadDocumentDetails(documentId: documentId)),
+                          ..add(LoadDocumentDetails(nodeId: documentId)),
                   ),
-                  BlocProvider(create: (_) => getIt<LinkCubit>()),
                 ],
                 child: DocumentDetailsPage(documentId: documentId),
               );

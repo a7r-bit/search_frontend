@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:search_frontend/core/domain/entities/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/constants/index.dart';
 import '../../../../core/domain/failures/failure.dart';
 
 part 'link_state.dart';
@@ -11,9 +9,9 @@ part 'link_state.dart';
 class LinkCubit extends Cubit<LinkState> {
   LinkCubit() : super(LinkInitial());
 
-  Future<void> openDocumentLink(DocumentVersion version) async {
+  Future<void> openDocumentLink(String fileUrl) async {
     try {
-      final url = "$API_URL${version.mediaFile?.fileUrl}";
+      final url = "http://localhost$fileUrl";
       final uri = Uri.tryParse(url);
 
       if (uri == null || !await canLaunchUrl(uri)) {

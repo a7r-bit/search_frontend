@@ -4,26 +4,27 @@ import 'package:search_frontend/core/utils/index.dart';
 import 'package:search_frontend/features/auth/data/auth_repository_impl.dart';
 import 'package:search_frontend/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:search_frontend/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:search_frontend/features/document_details/data/datasources/document_remote_data_source.dart';
 import 'package:search_frontend/features/document_details/data/datasources/document_version_remote_data_source.dart';
-import 'package:search_frontend/features/document_details/data/document_repository_impl.dart';
 import 'package:search_frontend/features/document_details/data/document_version_repository_impl.dart';
-import 'package:search_frontend/features/document_details/domain/repositories/document_repository.dart';
 import 'package:search_frontend/features/document_details/domain/repositories/document_version_repository.dart';
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_details_bloc.dart';
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_upload_bloc.dart';
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_version_delete_bloc.dart';
 import 'package:search_frontend/features/document_details/presentaition/bloc/document_version_update_bloc.dart';
 import 'package:search_frontend/features/document_details/presentaition/cubit/link_cubit.dart';
-import 'package:search_frontend/features/documents/data/datasources/file_node_remote_data_source.dart';
-import 'package:search_frontend/features/documents/data/datasources/saved_directory_remote_data_source.dart';
-import 'package:search_frontend/features/documents/data/directory_repository_impl.dart';
-import 'package:search_frontend/features/documents/data/saved_directory_repository_impl.dart';
-import 'package:search_frontend/features/documents/domain/repositories/file_node_repository.dart';
+import 'package:search_frontend/features/documents/data/datasources/node_remote_data_source.dart';
+import 'package:search_frontend/features/documents/data/datasources/saved_node_remote_data_source.dart';
+import 'package:search_frontend/features/documents/data/datasources/search_remote_data_source.dart';
+import 'package:search_frontend/features/documents/domain/implementation/node_repository_impl.dart';
+import 'package:search_frontend/features/documents/domain/implementation/saved_directory_repository_impl.dart';
+import 'package:search_frontend/features/documents/domain/implementation/search_repository_impl.dart';
+import 'package:search_frontend/features/documents/domain/repositories/node_repository.dart';
 import 'package:search_frontend/features/documents/domain/repositories/saved_directory_repository.dart';
-import 'package:search_frontend/features/documents/presentation/bloc/dialog_bloc.dart';
-import 'package:search_frontend/features/documents/presentation/bloc/directory_bloc.dart';
+import 'package:search_frontend/features/documents/domain/repositories/search_repository.dart';
+import 'package:search_frontend/features/documents/presentation/bloc/node_bloc.dart';
+import 'package:search_frontend/features/documents/presentation/bloc/node_explorer_bloc.dart';
 import 'package:search_frontend/features/documents/presentation/bloc/saved_directories_bloc.dart';
+import 'package:search_frontend/features/documents/presentation/cubit/node_sort_cubit.dart';
 import 'package:search_frontend/features/documents/presentation/cubit/search_cubit.dart';
 
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -46,17 +47,17 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(apiClient: getIt()),
   );
-  getIt.registerLazySingleton<SavedDirectoryDataSource>(
-    () => SavedDirectoryRemoteDataSourceImpl(apiClient: getIt()),
+  getIt.registerLazySingleton<SavedNodeDataSource>(
+    () => SavedNodeRemoteDataSourceImpl(apiClient: getIt()),
   );
-  getIt.registerLazySingleton<FileNodeRemoteDataSource>(
+  getIt.registerLazySingleton<NodeRemoteDataSource>(
     () => DirectoryRemoteDataSourceImpl(apiClient: getIt()),
   );
   getIt.registerLazySingleton<DocumentVersionRemoteDataSource>(
     () => DocumentVersionRemoteDataSourceImpl(apiClient: getIt()),
   );
-  getIt.registerLazySingleton<DocumentRemoteDataSource>(
-    () => DocumentRemoteDataSourceImpl(apiClient: getIt()),
+  getIt.registerLazySingleton<SearchDataSource>(
+    () => SearchRemoteDataSourceImpl(apiClient: getIt()),
   );
 
   // Repository
@@ -70,14 +71,14 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<SavedDirectoryRepository>(
     () => SavedDirectoryRepositoryImpl(remoteDataSource: getIt()),
   );
-  getIt.registerLazySingleton<FileNodeRepository>(
-    () => FileNodeRepositoryImpl(remoteDataSource: getIt()),
+  getIt.registerLazySingleton<NodeRepository>(
+    () => NodeRepositoryImpl(remoteDataSource: getIt()),
   );
   getIt.registerLazySingleton<DocumentVersionRepository>(
     () => DocumentVersionRepositoryImpl(remoteDataSource: getIt()),
   );
-  getIt.registerLazySingleton<DocumentRepository>(
-    () => DocumentRepositoryImpl(remoteDataSource: getIt()),
+  getIt.registerLazySingleton<SearchRepository>(
+    () => SearchRepositoryImpl(remoteDataSource: getIt()),
   );
 
   // Bloc
@@ -91,20 +92,14 @@ Future<void> setupDI() async {
   getIt.registerFactory<SavedDirectoriesBloc>(
     () => SavedDirectoriesBloc(repository: getIt<SavedDirectoryRepository>()),
   );
-  getIt.registerFactory<DirectoryBloc>(
-    () => DirectoryBloc(repository: getIt<FileNodeRepository>()),
+  getIt.registerFactory<NodeExplorerBloc>(
+    () => NodeExplorerBloc(repository: getIt<NodeRepository>()),
   );
   getIt.registerFactory<SearchCubit>(
-    () => SearchCubit(repository: getIt<FileNodeRepository>()),
+    () => SearchCubit(repository: getIt<SearchRepository>()),
   );
-  getIt.registerFactory<DocumentDetailsBloc>(
-    () => DocumentDetailsBloc(
-      documentRepository: getIt<DocumentRepository>(),
-      documentVersionRepository: getIt<DocumentVersionRepository>(),
-    ),
-  );
-  getIt.registerFactory<DialogBloc>(
-    () => DialogBloc(repository: getIt<FileNodeRepository>()),
+  getIt.registerFactory<NodeBloc>(
+    () => NodeBloc(repository: getIt<NodeRepository>()),
   );
   getIt.registerFactory<LinkCubit>(() => LinkCubit());
 
@@ -123,4 +118,11 @@ Future<void> setupDI() async {
       documentVersionRepository: getIt<DocumentVersionRepository>(),
     ),
   );
+  getIt.registerFactory<DocumentDetailsBloc>(
+    () => DocumentDetailsBloc(
+      documentVersionRepository: getIt<DocumentVersionRepository>(),
+      nodeRepository: getIt<NodeRepository>(),
+    ),
+  );
+  getIt.registerCachedFactory<NodeSortCubit>(() => NodeSortCubit());
 }

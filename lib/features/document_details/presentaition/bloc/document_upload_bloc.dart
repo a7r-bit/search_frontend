@@ -70,7 +70,7 @@ class DocumentUploadBloc
 
       final documentVersion = await documentVersionRepository
           .createDocumentVersion(
-            documentId: event.documentId,
+            nodeId: event.nodeId,
             multipartFile: multipartFile,
             onProgress: (sent, total) {
               emit(Uploading(progress: sent / total));

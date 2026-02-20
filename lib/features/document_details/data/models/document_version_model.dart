@@ -9,7 +9,7 @@ part 'document_version_model.g.dart';
 class DocumentVersionModel {
   final String id;
   final int version;
-  final String documentId;
+  final String nodeId;
   @ConversionStatusConverter()
   final ConversionStatus conversionStatus;
   @JsonKey(name: 'mediaFile')
@@ -23,7 +23,7 @@ class DocumentVersionModel {
   const DocumentVersionModel({
     required this.id,
     required this.version,
-    required this.documentId,
+    required this.nodeId,
     required this.conversionStatus,
     required this.mediaFileModel,
     required this.createdAt,
@@ -35,7 +35,7 @@ class DocumentVersionModel {
   DocumentVersion toDomain() => DocumentVersion(
     id: id,
     version: version,
-    documentId: documentId,
+    documentId: nodeId,
     conversionStatus: conversionStatus,
     mediaFile: mediaFileModel?.toDomain(),
     createdAt: createdAt,

@@ -365,12 +365,15 @@ class MaterialTheme {
     //ListTileThemeData
     listTileTheme: ListTileThemeData(
       contentPadding: EdgeInsets.only(left: AppPadding.small),
+
       tileColor: Colors.transparent,
+      // tileColor: Colors.red,
       selectedTileColor: colorScheme.secondaryContainer,
       selectedColor: colorScheme.onSecondaryContainer,
       textColor: colorScheme.onSecondaryContainer,
       iconColor: colorScheme.onSecondaryContainer,
-      titleTextStyle: textTheme.labelSmall,
+      titleTextStyle: textTheme.labelMedium,
+      subtitleTextStyle: textTheme.labelSmall,
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(AppRadius.small),
       ),
@@ -402,6 +405,30 @@ class MaterialTheme {
         textTheme.bodyMedium!.copyWith(color: colorScheme.onSurface),
       ),
       elevation: WidgetStatePropertyAll(0),
+    ),
+
+    menuTheme: MenuThemeData(
+      style: MenuStyle(
+        padding: WidgetStatePropertyAll(
+          EdgeInsetsGeometry.symmetric(horizontal: 2, vertical: 10),
+        ),
+      ),
+    ),
+    // MenuItemButton
+    menuButtonTheme: MenuButtonThemeData(
+      style: ButtonStyle(
+        minimumSize: WidgetStatePropertyAll(Size(160, 40)),
+        visualDensity: VisualDensity.comfortable,
+        backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceContainer),
+        iconColor: WidgetStatePropertyAll(colorScheme.onSurface),
+        iconSize: WidgetStatePropertyAll(24),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(AppRadius.small),
+          ),
+        ),
+        textStyle: WidgetStatePropertyAll(textTheme.labelMedium),
+      ),
     ),
   );
 

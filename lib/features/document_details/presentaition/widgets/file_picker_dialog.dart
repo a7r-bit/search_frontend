@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -49,15 +51,15 @@ class FilePickerDialog extends StatelessWidget {
         width: 340,
         height: 340,
         // padding: EdgeInsets.all(AppPadding.small),
-        child: DialogBody(documentId: documetnId),
+        child: DialogBody(nodeId: documetnId),
       ),
     );
   }
 }
 
 class DialogBody extends StatefulWidget {
-  final String documentId;
-  const DialogBody({super.key, required this.documentId});
+  final String nodeId;
+  const DialogBody({super.key, required this.nodeId});
 
   @override
   State<DialogBody> createState() => _DialogBodyState();
@@ -184,13 +186,15 @@ class _DialogBodyState extends State<DialogBody> {
                         SizedBox(height: 20),
 
                         TextButton(
-                          onPressed: () =>
-                              context.read<DocumentUploadBloc>().add(
-                                CreateDocumentVersion(
-                                  documentId: widget.documentId,
-                                  file: state.file,
-                                ),
+                          onPressed: () => {
+                            log(widget.nodeId, name: "NODE_ID"),
+                            context.read<DocumentUploadBloc>().add(
+                              CreateDocumentVersion(
+                                nodeId: widget.nodeId,
+                                file: state.file,
                               ),
+                            ),
+                          },
                           child: Text("Создать"),
                         ),
                       ],

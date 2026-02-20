@@ -11,7 +11,7 @@ final class SavedDirectoriesInitial extends SavedDirectoriesState {}
 final class SavedDirectoriesLoading extends SavedDirectoriesState {}
 
 final class SavedDirectoriesLoaded extends SavedDirectoriesState {
-  final List<SavedDirectory> directories;
+  final List<Node> directories;
 
   SavedDirectoriesLoaded({required this.directories});
 
