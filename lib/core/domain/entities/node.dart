@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:search_frontend/core/constants/index.dart';
 
 class Node {
   final String id;

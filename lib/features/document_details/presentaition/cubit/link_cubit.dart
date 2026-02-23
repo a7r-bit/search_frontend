@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:search_frontend/core/constants/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/domain/failures/failure.dart';
@@ -11,7 +12,7 @@ class LinkCubit extends Cubit<LinkState> {
 
   Future<void> openDocumentLink(String fileUrl) async {
     try {
-      final url = "http://localhost$fileUrl";
+      final url = "$BASE_URL$fileUrl";
       final uri = Uri.tryParse(url);
 
       if (uri == null || !await canLaunchUrl(uri)) {

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+const String BASE_URL = String.fromEnvironment(
+  "BASE_URL",
+  defaultValue: "http://localhost:8080",
+);
+
 const String API_URL = String.fromEnvironment(
   "API_URL",
-  defaultValue: "http://localhost:3000",
+  defaultValue: "$BASE_URL/api",
 );
 
 const ACCESS_TOKEN_STORAGE_KEY = "access_token";
