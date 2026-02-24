@@ -352,6 +352,7 @@ class MaterialTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: colorScheme.surfaceContainerLow,
+      suffixIconColor: colorScheme.onSurfaceVariant,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.small),
         borderSide: BorderSide(color: colorScheme.outline),

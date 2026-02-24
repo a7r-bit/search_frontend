@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 const String BASE_URL = String.fromEnvironment(
   "BASE_URL",
-  defaultValue: "http://localhost:8080",
+  defaultValue: "http://localhost:3000",
 );
 
 const String API_URL = String.fromEnvironment(

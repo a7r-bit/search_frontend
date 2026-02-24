@@ -17,6 +17,7 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   final TextEditingController loginController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _obscurePassword = true;
   @override
   void dispose() {
     loginController.dispose();
@@ -102,7 +103,24 @@ class _SignInFormState extends State<SignInForm> {
                     ),
                   ),
                   SizedBox(height: AppPadding.extraSmall),
-                  TextField(controller: passwordController),
+
+                  TextField(
+                    controller: passwordController,
+                    obscureText: _obscurePassword,
+                    enableSuggestions: false,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () => setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        }),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: SizeConfig.blockSizeVertical * 3),
                   Row(
                     children: [
