@@ -4,8 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - API_URL=http://search.mingas.by:3000/api
-        - BASE_URL=http://search.mingas.by:3000
+        - API_URL=http://search.mingas.by/api
+        - BASE_URL=http://search.mingas.by
     container_name: frontend
     ports:
       - "8080:80"
