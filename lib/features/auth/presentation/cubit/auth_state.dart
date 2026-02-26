@@ -34,6 +34,14 @@ class AuthState {
     );
   }
 
+  @override
+  String toString() {
+    return 'AuthState(status: $status, '
+        'user: $user, '
+        'message: $message, '
+        'errorCode: $errorCode)';
+  }
+
   factory AuthState.fromJson(Map<String, dynamic> json) =>
       _$AuthStateFromJson(json);
 

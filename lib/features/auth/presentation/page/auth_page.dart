@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +18,8 @@ class AuthPage extends StatelessWidget {
       listener: (context, state) {
         if (state.status == AuthStatus.success) {
           context.goNamed("node", pathParameters: {"nodeId": "root"});
-        }
-        if (state.status == AuthStatus.failure) {
+        } else {
+          print(state.toString());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${state.message}-${state.errorCode}"),
