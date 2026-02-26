@@ -1,5 +1,6 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:search_frontend/core/domain/failures/failure.dart';
+import 'package:search_frontend/features/auth/data/models/authenticated_user_model.dart';
 import 'package:search_frontend/features/auth/presentation/cubit/auth_state.dart';
 import '../../../../core/domain/entities/index.dart';
 import '../../domain/repositories/auth_repository.dart';
