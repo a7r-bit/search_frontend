@@ -15,8 +15,9 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final TextEditingController loginController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final loginController = TextEditingController();
+  final passwordController = TextEditingController();
   bool _obscurePassword = true;
   @override
   void dispose() {
@@ -65,112 +66,153 @@ class _SignInFormState extends State<SignInForm> {
             ),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      "assets/logo.png",
-                      color: Theme.of(context).colorScheme.primary,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        "assets/logo.png",
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: SizeConfig.blockSizeVertical * 2),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Вход в учетную запись",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Вход в учетную запись",
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                    ),
+                    Divider(),
+                    SizedBox(height: SizeConfig.blockSizeVertical),
+                    Text(
+                      "Табельный номер",
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                  ),
-                  Divider(),
-                  SizedBox(height: SizeConfig.blockSizeVertical),
-                  Text(
-                    "Табельный номер",
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
+                    SizedBox(height: AppPadding.extraSmall),
+                    // TextField(controller: loginController),
+                    TextFormField(
+                      controller: loginController,
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "Табельный номер обязательно";
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  SizedBox(height: AppPadding.extraSmall),
-                  TextField(controller: loginController),
-                  SizedBox(height: SizeConfig.blockSizeVertical * 2),
-                  Text(
-                    "Пароль",
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  SizedBox(height: AppPadding.extraSmall),
-
-                  TextField(
-                    controller: passwordController,
-                    obscureText: _obscurePassword,
-                    enableSuggestions: false,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        onPressed: () => setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        }),
+                    SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                    Text(
+                      "Пароль",
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                  ),
-                  SizedBox(height: SizeConfig.blockSizeVertical * 3),
-                  Row(
-                    children: [
-                      BlocBuilder<AuthCubit, AuthState>(
-                        builder: (context, state) {
-                          return Expanded(
-                            child: FilledButton(
-                              onPressed: state.status == AuthStatus.loading
-                                  ? null
-                                  : () {
-                                      context.read<AuthCubit>().login(
-                                        loginController.text.trim(),
-                                        passwordController.text.trim(),
-                                      );
-                                    },
-                              style: FilledButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadius.small,
+                    SizedBox(height: AppPadding.extraSmall),
+
+                    // TextField(
+                    //   controller: passwordController,
+                    //   obscureText: _obscurePassword,
+                    //   enableSuggestions: false,
+                    //   decoration: InputDecoration(
+                    //     suffixIcon: IconButton(
+                    //       icon: Icon(
+                    //         _obscurePassword
+                    //             ? Icons.visibility_off
+                    //             : Icons.visibility,
+                    //       ),
+                    //       onPressed: () => setState(() {
+                    //         _obscurePassword = !_obscurePassword;
+                    //       }),
+                    //     ),
+                    //   ),
+                    // ),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: _obscurePassword,
+                      enableSuggestions: false,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () => setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          }),
+                        ),
+                      ),
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "Пароль обязателен";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: SizeConfig.blockSizeVertical * 3),
+                    Row(
+                      children: [
+                        BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, state) {
+                            return Expanded(
+                              child: FilledButton(
+                                onPressed: state.status == AuthStatus.loading
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState?.validate() ??
+                                            false) {
+                                          context.read<AuthCubit>().login(
+                                            loginController.text.trim(),
+                                            passwordController.text.trim(),
+                                          );
+                                        }
+                                      },
+                                style: FilledButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      AppRadius.small,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: AppPadding.small,
-                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: AppPadding.small,
+                                  ),
 
-                                child:
-                                    // state.status == AuthStatus.loading
-                                    // ? CircularProgressIndicator()
-                                    // :
-                                    Text(
-                                      'Войти',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary,
-                                          ),
-                                    ),
+                                  child:
+                                      // state.status == AuthStatus.loading
+                                      // ? CircularProgressIndicator()
+                                      // :
+                                      Text(
+                                        'Войти',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
+                                            ),
+                                      ),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

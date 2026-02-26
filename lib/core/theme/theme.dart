@@ -352,7 +352,7 @@ class MaterialTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: colorScheme.surfaceContainerLow,
-      suffixIconColor: colorScheme.onSurfaceVariant,
+      suffixIconColor: colorScheme.onSurface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.small),
         borderSide: BorderSide(color: colorScheme.outline),
@@ -411,7 +411,7 @@ class MaterialTheme {
     menuTheme: MenuThemeData(
       style: MenuStyle(
         padding: WidgetStatePropertyAll(
-          EdgeInsetsGeometry.symmetric(horizontal: 2, vertical: 10),
+          EdgeInsetsGeometry.symmetric(horizontal: 2, vertical: 6),
         ),
       ),
     ),

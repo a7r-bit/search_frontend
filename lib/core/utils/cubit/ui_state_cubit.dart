@@ -6,18 +6,27 @@ class UiStateCubit extends HydratedCubit<UIState> {
 
   void toggleTableView() =>
       emit(state.copyWith(isTableView: !state.isTableView));
-  void toggleDarkMode() => emit(state.copyWith(isDarkMode: !state.isDarkMode));
+
+  void toggleShowDocumentDetailsDetails() => emit(
+    state.copyWith(
+      showDocumentDetailsDetails: !state.showDocumentDetailsDetails,
+    ),
+  );
 
   @override
   UIState fromJson(Map<String, dynamic> json) {
     return UIState(
       isTableView: json['isTableView'] as bool? ?? true,
-      isDarkMode: json['isDarkMode'] as bool? ?? false,
+      showDocumentDetailsDetails:
+          json['showDocumentDetailsDetails'] as bool? ?? true,
     );
   }
 
   @override
   Map<String, dynamic> toJson(UIState state) {
-    return {'isTableView': state.isTableView, 'isDarkMode': state.isDarkMode};
+    return {
+      'isTableView': state.isTableView,
+      'showDocumentDetailsDetails': state.showDocumentDetailsDetails,
+    };
   }
 }
