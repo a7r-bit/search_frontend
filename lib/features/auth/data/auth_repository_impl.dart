@@ -19,16 +19,12 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthenticatedUser> login(String username, String password) async {
     try {
       final model = await remoteDataSource.login(username, password);
-      print("Login successful, received model: $model");
       await secureStorage.saveTokens(
         accessToken: model.tokens.accessToken,
         refreshToken: model.tokens.refreshToken,
       );
-      print("Tokens saved to secure storage");
       apiClient.setToken(model.tokens.accessToken);
-      print("API client token set");
       final user = model.toDomain();
-      print("Converted to domain model: $user");
       return user;
     } on Exception catch (e) {
       throw mapExceptionToFailure(e);

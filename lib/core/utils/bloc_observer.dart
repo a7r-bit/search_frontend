@@ -13,7 +13,6 @@ class MyBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('Ошибка в ${bloc.runtimeType}: $error');
     super.onError(bloc, error, stackTrace);
     if (error is Failure) {
       errorBloc.add(ErrorReport(failure: error));
@@ -23,7 +22,6 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    print('${bloc.runtimeType} $change');
   }
 
   @override

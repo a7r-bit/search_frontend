@@ -8,7 +8,6 @@ part 'error_state.dart';
 class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
   ErrorBloc() : super(ErrorInitial()) {
     on<ErrorReport>((event, emit) async {
-      print("Ошибка прокинулась в ERRORBLOC ${event.failure}");
       emit(ErrorReported(failure: event.failure));
       await Future.delayed(Duration(seconds: 2));
       emit(ErrorInitial());
