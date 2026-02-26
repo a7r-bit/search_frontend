@@ -35,18 +35,6 @@ class _MyAppState extends State<MyApp> {
     TextTheme textTheme = createTextTheme(context, "Roboto", "Roboto");
     MaterialTheme theme = MaterialTheme(textTheme);
 
-    // return MultiBlocProvider(
-    //   providers: [BlocProvider(create: (_) => getIt<AuthCubit>())],
-    //   child: MaterialApp.router(
-    //     debugShowCheckedModeBanner: false,
-    //     theme: theme.light(),
-    //     darkTheme: theme.dark(),
-    //     themeMode: ThemeMode.system,
-
-    //     routerConfig: AppRouter.goRouter,
-    //   ),
-    // );
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: theme.light(),

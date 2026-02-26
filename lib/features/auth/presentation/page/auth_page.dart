@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,10 +14,13 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
+        print(state.status);
         if (state.status == AuthStatus.success) {
+          print(state.status);
           context.goNamed("node", pathParameters: {"nodeId": "root"});
-        } else {
-          print(state.toString());
+        }
+        if (state.status == AuthStatus.failure) {
+          print(state.status);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${state.message}-${state.errorCode}"),
