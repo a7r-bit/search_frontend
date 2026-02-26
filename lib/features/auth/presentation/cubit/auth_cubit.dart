@@ -5,7 +5,8 @@ import '../../../../core/domain/entities/index.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/domain/entities/authenticated_user.dart';
 
-class AuthCubit extends HydratedCubit<AuthState> {
+// class AuthCubit extends HydratedCubit<AuthState> {
+class AuthCubit extends Cubit<AuthState> {
   final AuthRepository repository;
 
   AuthCubit({required this.repository}) : super(const AuthState());
