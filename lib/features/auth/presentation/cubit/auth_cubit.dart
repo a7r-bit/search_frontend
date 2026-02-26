@@ -18,6 +18,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         username,
         password,
       );
+      print("AuthenticatedUser: $authUser");
       emit(
         state.copyWith(
           status: AuthStatus.success,
@@ -26,6 +27,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         ),
       );
     } on Failure catch (e) {
+      print("Login error: ${e.message}, code: ${e.code}");
       addError(e);
       emit(
         state.copyWith(

@@ -14,12 +14,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AuthenticatedUserModel> login(String username, String password) async {
+    print("Login request: username=$username, password=$password");
     final response = await _apiClient.post(
       '/auth/signIn',
       data: {"username": username, "password": password},
     );
+    print("Login response: $response");
 
-    return AuthenticatedUserModel.fromJson(response);
+    final model = AuthenticatedUserModel.fromJson(response);
+    print("Parsed AuthenticatedUserModel: $model");
+    return model;
   }
 
   @override
